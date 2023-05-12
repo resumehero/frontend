@@ -1,0 +1,7 @@
+<div class="toolbar" [class.toolbar_hidden]="isHidden">
+  <div class="toolbar__content" *ngIf="template">
+    <ng-container *ngTemplateOutlet="template ? template : defaultItemTemplate; context: { $implicit: templateData }"></ng-container>
+  </div>
+</div>
+
+<ng-template #defaultItemTemplate></ng-template>

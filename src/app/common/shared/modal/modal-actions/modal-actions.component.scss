@@ -1,0 +1,13 @@
+.modal-actions {
+  justify-content: center;
+  gap: 1.2rem;
+  padding: 0;
+
+  &__button {
+    padding: 0 3rem;
+
+    &:only-child {
+      flex-grow: 1;
+    }
+  }
+}

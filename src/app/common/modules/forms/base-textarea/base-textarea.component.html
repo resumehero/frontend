@@ -1,0 +1,19 @@
+<label>
+  <mat-form-field [appearance]="appearance" [floatLabel]="floatLabel">
+    <mat-label *ngIf="withLabel">{{ placeholder }}</mat-label>
+    <mat-icon matPrefix *ngIf="icon" [svgIcon]="icon" color="primary">{{ icon }}</mat-icon>
+    <textarea
+      matInput
+      cdkTextareaAutosize
+      #autosize="cdkTextareaAutosize"
+      [cdkAutosizeMinRows]="minRows"
+      [cdkAutosizeMaxRows]="maxRows"
+      [formControl]="formControl"
+      [placeholder]="placeholder"
+      [maxLength]="maxLength"
+      [required]="required"
+      [readonly]="readonly"
+    ></textarea>
+    <mat-error *ngIf="control?.invalid && errorMessage">{{ errorMessage }}</mat-error>
+  </mat-form-field>
+</label>

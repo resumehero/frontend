@@ -1,0 +1,29 @@
+$color-blue: #3143de;
+$color-primary: $color-blue;
+
+$color-orange: #f2870d;
+$color-accent: $color-orange;
+
+$color-red: #e91010;
+$color-warn: $color-red;
+
+$color-grey: #f4f5fa;
+$color-bg: $color-grey;
+
+$color-black: #000;
+$color-white: #fff;
+$color-input-bg: linear-gradient(0deg, rgba(255, 255, 255, 40%), rgba(255, 255, 255, 40%)), $color-grey;
+
+:root {
+  --color-blue: #{$color-blue};
+  --color-primary: #{$color-primary};
+  --color-orange: #{$color-orange};
+  --color-accent: #{$color-accent};
+  --color-red: #{$color-red};
+  --color-warn: #{$color-warn};
+  --color-black: #{$color-black};
+  --color-gray: #{$color-grey};
+  --color-bg: #{$color-bg};
+  --color-white: #{$color-white};
+  --color-input-bg: #{$color-input-bg};
+}
