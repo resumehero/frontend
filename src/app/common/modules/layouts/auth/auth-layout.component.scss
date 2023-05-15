@@ -20,8 +20,8 @@
   &__content {
     padding: 2rem;
 
-    @media (max-width: $desktop-m) {
-      padding: var(--s-5) 10rem;
+    @media (max-width: $mobile-l) {
+      padding: 1rem;
     }
   }
 

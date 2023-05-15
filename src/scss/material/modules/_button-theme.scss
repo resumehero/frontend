@@ -24,4 +24,12 @@
   @if $typography-config != null {
     @include typography($theme);
   }
+
+  .mdc-button {
+    &.mat-mdc-button-base {
+      height: var(--button-height);
+      min-width: var(--button-height);
+      border-radius: 0.6rem;
+    }
+  }
 }

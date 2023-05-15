@@ -11,7 +11,7 @@ export class HttpServiceError extends HttpErrorResponse {
   }
 
   private get _isFormError(): boolean {
-    return Boolean(this.error.violations);
+    return Boolean(this.error?.violations);
   }
 
   constructor(e: HttpErrorResponse) {

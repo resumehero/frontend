@@ -16,17 +16,17 @@ $warn-palette: mat.define-palette(warn.$palette, 200, 100, 300);
 $custom-typography: mat.define-typography-config(
   $font-family: var(--ff-main-font),
   $headline-1: mat.define-typography-level(112px, 112px, 300, $font-family: var(--ff-main-font), $letter-spacing: -0.05em),
-  $headline-2: mat.define-typography-level(56px, 56px, 400, $font-family: var(--ff-main-font), $letter-spacing: -0.02em),
-  $headline-3: mat.define-typography-level(45px, 48px, 400, $font-family: var(--ff-main-font), $letter-spacing: -0.005em),
-  $headline-4: mat.define-typography-level(34px, 40px, 400, $font-family: var(--ff-main-font)),
-  $headline-5: mat.define-typography-level(24px, 32px, 400, $font-family: var(--ff-main-font)),
-  $headline-6: mat.define-typography-level(20px, 32px, 500, $font-family: var(--ff-main-font)),
-  $subtitle-2: mat.define-typography-level(16px, 28px, 400, $font-family: var(--ff-main-font)),
-  $subtitle-1: mat.define-typography-level(15px, 24px, 400, $font-family: var(--ff-main-font)),
-  $body-2: mat.define-typography-level(14px, 24px, 500, $font-family: var(--ff-main-font)),
-  $body-1: mat.define-typography-level(14px, 20px, 400, $font-family: var(--ff-main-font)),
-  $caption: mat.define-typography-level(12px, 20px, 400, $font-family: var(--ff-main-font)),
-  $button: mat.define-typography-level(14px, 14px, 500, $font-family: var(--ff-main-font))
+  $headline-2: mat.define-typography-level(56px, 56px, var(--fw-normal), $font-family: var(--ff-main-font), $letter-spacing: -0.02em),
+  $headline-3: mat.define-typography-level(45px, 48px, var(--fw-normal), $font-family: var(--ff-main-font), $letter-spacing: -0.005em),
+  $headline-4: mat.define-typography-level(34px, 40px, var(--fw-normal), $font-family: var(--ff-main-font)),
+  $headline-5: mat.define-typography-level(24px, 32px, var(--fw-normal), $font-family: var(--ff-main-font)),
+  $headline-6: mat.define-typography-level(22px, 30.8px, var(--fw-semi-bold), $font-family: var(--ff-main-font)),
+  $subtitle-2: mat.define-typography-level(16px, 28px, var(--fw-normal), $font-family: var(--ff-main-font)),
+  $subtitle-1: mat.define-typography-level(15px, 24px, var(--fw-normal), $font-family: var(--ff-main-font)),
+  $body-2: mat.define-typography-level(16px, 24px, var(--fw-medium), $font-family: var(--ff-main-font)),
+  $body-1: mat.define-typography-level(16px, 20px, var(--fw-medium), $font-family: var(--ff-main-font)),
+  $caption: mat.define-typography-level(12px, 20px, var(--fw-normal), $font-family: var(--ff-main-font)),
+  $button: mat.define-typography-level(16px, 20px, var(--fw-semi-bold), $font-family: var(--ff-main-font))
 );
 
 $custom-theme: mat.define-light-theme(
@@ -40,6 +40,7 @@ $custom-theme: mat.define-light-theme(
   )
 );
 
+@include mat.typography-hierarchy($custom-typography);
 @include mat.all-component-themes($custom-theme);
 @include button.theme($custom-theme);
 @include form-field.theme($custom-theme);

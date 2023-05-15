@@ -1,24 +1,32 @@
-<form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="auth-form__form">
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup" class="auth-form">
+  <h2 class="auth-form__title mat-h2 text-center">Welcome!</h2>
+
   <base-form-input
-    [inputType]="InputType.email"
     [control]="form?.username"
+    [icon]="'envelope'"
+    [inputType]="InputType.email"
     [placeholder]="'INPUT_NAME.EMAIL' | translate"
     [required]="true"
+    class="auth-form__field"
   ></base-form-input>
 
   <base-form-input
-    [inputType]="InputType.password"
     [control]="form?.password"
+    [icon]="'lock'"
+    [inputType]="InputType.password"
     [placeholder]="'INPUT_NAME.PASSWORD' | translate"
     [required]="true"
+    class="auth-form__field"
   ></base-form-input>
 
   <div class="auth-form__wrap">
-    <base-boolean-field [type]="BooleanFieldType.checkbox" [control]="form?.shouldRemember">
-      {{ 'INPUT_NAME.REMEMBER_ME' | translate }}
-    </base-boolean-field>
-    <a mat-button type="button" routerLink="/auth/forgot-password">{{ 'BUTTON_NAME.FORGOT_PASSWORD' | translate }}</a>
+    <a [routerLink]="'/auth/forgot-password'" class="auth-form__pass-link link">{{ 'BUTTON_NAME.FORGOT_PASSWORD' | translate }}</a>
   </div>
 
-  <button mat-flat-button color="accent">{{ 'BUTTON_NAME.LOGIN' | translate }}</button>
+  <button class="auth-form__button" color="primary" mat-flat-button>{{ 'BUTTON_NAME.LOGIN' | translate }}</button>
+
+  <div class="auth-form__bottom-text">
+    Don’t have an account?
+    <a [routerLink]="'/auth/sign-up'" class="link">{{ 'BUTTON_NAME.SIGN_UP' | translate }}</a>
+  </div>
 </form>
