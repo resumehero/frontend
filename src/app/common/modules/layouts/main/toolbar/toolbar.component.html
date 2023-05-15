@@ -1,5 +1,24 @@
-<div class="toolbar" [class.toolbar_hidden]="isHidden">
-  <div class="toolbar__content" *ngIf="template">
+<div [class.toolbar_hidden]="isHidden" class="toolbar">
+  <div class="toolbar__page-meta">
+    <h1 class="toolbar__page-name mat-h1">{{ pageName }}</h1>
+  </div>
+
+  <nav *ngIf="navLinks?.length" [tabPanel]="tabPanel" class="toolbar__nav-tabs" mat-tab-nav-bar>
+    <a
+      #anchorElement
+      *ngFor="let link of navLinks"
+      [active]="anchorElement.elementRef.nativeElement.classList.contains('active')"
+      [routerLink]="link.path"
+      mat-tab-link
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      {{ link.title }}
+    </a>
+  </nav>
+  <mat-tab-nav-panel #tabPanel [hidden]="true"></mat-tab-nav-panel>
+
+  <div *ngIf="template" class="toolbar__content">
     <ng-container *ngTemplateOutlet="template ? template : defaultItemTemplate; context: { $implicit: templateData }"></ng-container>
   </div>
 </div>

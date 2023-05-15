@@ -25,24 +25,21 @@
     @include typography($theme);
   }
 
-  .mdc-button {
-    &.mat-mdc-button-base {
-      padding: var(--button-padding);
-      height: var(--button-height);
-      min-width: var(--button-height);
-      border-radius: 0.6rem;
+  .mat-mdc-tab-nav-bar {
+    background-color: var(--color-white);
+    border-radius: 0.6rem;
+    padding: 0 1.5rem;
 
-      > .mat-icon {
-        width: var(--icon-size);
-        min-width: var(--icon-size);
-        height: var(--icon-size);
+    .mat-mdc-tab-link.mdc-tab {
+      height: 6rem;
+      padding: 0 2rem;
+      min-width: auto;
+      margin: 0;
+      opacity: 1;
+
+      &.active {
+        color: var(--color-primary);
       }
     }
-  }
-
-  .mat-icon {
-    width: var(--icon-size);
-    min-width: var(--icon-size);
-    height: var(--icon-size);
   }
 }

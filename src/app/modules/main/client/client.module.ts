@@ -5,6 +5,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { NotFoundPageComponent } from '@modules/main/common/not-found-page/not-found-page.component';
 import { MainLayoutComponent } from '@layouts/main/main-layout.component';
 import { MainLayoutModule } from '@layouts/main/main-layout.module';
+import { ProfileComponent } from '@modules/main/client/profile/profile.component';
+import { ResumesComponent } from '@modules/main/client/resumes/resumes.component';
+import { ProfileModule } from '@modules/main/client/profile/profile.module';
+import { ResumesModule } from '@modules/main/client/resumes/resumes.module';
+import { ProfileFormComponent } from '@modules/main/client/profile/profile-form/profile-form.component';
+import { ChangePasswordComponent } from '@modules/main/client/profile/change-password/change-password.component';
+import { ResumeListComponent } from '@modules/main/client/resumes/resume-list/resume-list.component';
 
 const routes: Routes = [
   {
@@ -14,7 +21,33 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: '/404'
+        redirectTo: 'profile'
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            component: ProfileFormComponent
+          },
+          {
+            path: 'change-password',
+            component: ChangePasswordComponent
+          }
+        ]
+      },
+      {
+        path: 'resumes',
+        component: ResumesComponent,
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            component: ResumeListComponent
+          }
+        ]
       },
       {
         path: '**',
@@ -30,6 +63,6 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, RouterModule.forChild(routes), MainLayoutModule, NotFoundPageModule]
+  imports: [CommonModule, RouterModule.forChild(routes), MainLayoutModule, NotFoundPageModule, ProfileModule, ResumesModule]
 })
 export class ClientModule {}

@@ -1,9 +1,11 @@
 {
   "INPUT_NAME": {
     "EMAIL": "Email",
+    "CURRENT_PASSWORD": "Current password",
     "PASSWORD": "Password",
     "NEW_PASSWORD": "New password",
     "CONFIRM_PASSWORD": "Confirm password",
+    "CONFIRM_NEW_PASSWORD": "Confirm new password",
     "REMEMBER_ME": "Remember me",
     "ROLE": "Role",
     "FIRST_NAME": "First Name",
