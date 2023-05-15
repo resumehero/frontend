@@ -19,6 +19,10 @@ export abstract class AbstractListingApiComponent<T = any> extends AbstractCrudH
   readonly BASE_DATE_FORMAT: string = DATE_FORMAT.FULL;
   abstract list: List<T>;
 
+  get qp(): QueryParamsService {
+    return this._queryParams;
+  }
+
   get params(): Params {
     return this._queryParams.params;
   }

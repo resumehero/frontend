@@ -1,0 +1,28 @@
+.resume {
+  display: flex;
+  gap: 1.6rem;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-white);
+  border-radius: 1.5rem;
+  padding: 1.8rem 3rem;
+
+  &__icon {
+    --icon-size: 3.2rem;
+  }
+
+  &__info {
+    flex: 1;
+  }
+
+  &__title {
+    font-weight: var(--fw-semi-bold);
+    line-height: 2rem;
+    text-decoration-line: underline;
+    margin-bottom: 0.6rem;
+  }
+
+  &__controls {
+    display: flex;
+  }
+}
