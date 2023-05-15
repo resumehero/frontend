@@ -1,0 +1,50 @@
+@import "variables/modules/breakpoints";
+
+.auth-form {
+  background: var(--color-white);
+  border: 0.5px solid rgba(56, 56, 138, 12%);
+  box-shadow: var(--card-shadow);
+  border-radius: 1.5rem;
+  padding: 5.5rem 5rem;
+  max-width: 50rem;
+
+  @media (max-width: $mobile-l) {
+    padding: 5.5rem 2rem;
+  }
+
+  &__title {
+    margin-bottom: 3rem;
+  }
+
+  &__sub-title {
+    margin-bottom: 3rem;
+    font-size: 1.4rem;
+    line-height: 160%;
+  }
+
+  &__wrap {
+    display: flex;
+  }
+
+  &__button {
+    width: 100%;
+    margin-top: 2.8rem;
+  }
+
+  &__pass-link {
+    margin-left: auto;
+  }
+
+  &__bottom-text {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    font-weight: var(--fw-medium);
+  }
+
+  &__agreement {
+    font-weight: var(--fw-medium);
+  }
+}

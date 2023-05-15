@@ -3,7 +3,6 @@ import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@services/auth/auth.service';
 import { VALIDATORS_SET } from '@misc/constants/validators-set.constant';
-import { BooleanFieldType } from '@forms/base-boolean-field/base-boolean-field.component';
 import { AbstractFormComponent } from '@misc/abstracts/components/abstract-form.component';
 import { InitPathService } from '@services/init-path/init-path.service';
 
@@ -16,7 +15,6 @@ export class LogInComponent extends AbstractFormComponent implements OnInit {
   private _router: Router = inject(Router);
   private _auth: AuthService = inject(AuthService);
   private _initPath: InitPathService = inject(InitPathService);
-  readonly BooleanFieldType: typeof BooleanFieldType = BooleanFieldType;
 
   onSubmit(): void {
     this.formGroup.markAllAsTouched();
@@ -37,7 +35,7 @@ export class LogInComponent extends AbstractFormComponent implements OnInit {
     this.formGroup = this._fb.group({
       username: new FormControl('', [Validators.required, VALIDATORS_SET.EMAIL]),
       password: new FormControl('', [Validators.required]),
-      shouldRemember: new FormControl(false)
+      shouldRemember: new FormControl(true)
     });
   }
 }

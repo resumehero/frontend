@@ -12,8 +12,18 @@
     [type]="type"
     matInput
   />
-  <button (click)="togglePassword()" *ngIf="isPasswordInput" [disabled]="disabled" mat-icon-button matSuffix tabindex="-1" type="button">
-    <mat-icon>{{ buttonIcon }}</mat-icon>
+  <button
+    (click)="togglePassword()"
+    *ngIf="isPasswordInput"
+    [color]="buttonIconColor"
+    [disabled]="disabled"
+    [style.opacity]="buttonIconColor ? 1 : 0.2"
+    mat-icon-button
+    matSuffix
+    tabindex="-1"
+    type="button"
+  >
+    <mat-icon [svgIcon]="'eye'"></mat-icon>
   </button>
   <button
     (click)="search.emit(formControl.value)"

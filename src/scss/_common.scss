@@ -1,3 +1,17 @@
 .spacer {
   flex: 1 0 auto;
 }
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.link {
+  color: var(--color-primary);
+  font-weight: var(--fw-semi-bold);
+  line-height: 2rem;
+}

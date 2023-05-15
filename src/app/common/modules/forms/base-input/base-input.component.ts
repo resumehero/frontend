@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractFormFieldComponent } from '@misc/abstracts/components/abstract-form-field.component';
 import { InputType } from '@models/enums/input-type.enum';
+import { ThemePalette } from '@angular/material/core';
 
 @Component({
   selector: 'base-form-input',
@@ -20,8 +21,8 @@ export class BaseInputComponent extends AbstractFormFieldComponent {
     return this.inputType === InputType.password;
   }
 
-  get buttonIcon(): string {
-    return this._shouldRevealPassword ? 'visibility_off' : 'visibility';
+  get buttonIconColor(): ThemePalette {
+    return this._shouldRevealPassword ? 'primary' : null;
   }
 
   get type(): string {

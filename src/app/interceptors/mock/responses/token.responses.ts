@@ -22,7 +22,7 @@ export const tokensResponses: ITokensResponses = {
       access_token: token,
       refresh_token: token
     };
-
+    console.log(entity);
     if (grantType === GrantType.clientCredentials || token) {
       return of(new HttpResponse({ status: 200, body: entity }));
     } else {
