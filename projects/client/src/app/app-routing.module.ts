@@ -7,6 +7,8 @@ import { IRoleGuardParams, RoleGuard } from '@guards/role/role.guard';
 import { AuthGuard } from '@guards/auth/auth.guard';
 import { AuthModule } from '@modules/auth/auth.module';
 import { ClientModule } from '@modules/main/client/client.module';
+import { StaticModule } from '@modules/static/static.module';
+import { AuthLayoutComponent } from '@layouts/auth/auth-layout.component';
 
 const routes: Routes = [
   {
@@ -14,6 +16,12 @@ const routes: Routes = [
     canActivate: [UnauthGuard],
     loadChildren: (): Promise<Type<AuthModule>> =>
       import('@modules/auth/auth.module').then((m: { AuthModule: Type<AuthModule> }): Type<AuthModule> => m.AuthModule)
+  },
+  {
+    path: 'static',
+    component: AuthLayoutComponent,
+    loadChildren: (): Promise<Type<StaticModule>> =>
+      import('@modules/static/static.module').then((m: { StaticModule: Type<StaticModule> }): Type<StaticModule> => m.StaticModule)
   },
   {
     path: '',

@@ -28,11 +28,11 @@
     class="auth-form__field"
   ></base-form-input>
 
-  <base-boolean-field class="auth-form__agreement" [type]="BooleanFieldType.checkbox">
+  <base-boolean-field [type]="BooleanFieldType.checkbox" class="auth-form__agreement">
     I agree to
-    <a [routerLink]="'/auth/forgot-password'" class="link">Terms of Use</a>
+    <a [routerLink]="'/static/terms-of-use'" class="link" target="_blank">Terms of Use</a>
     and
-    <a [routerLink]="'/auth/forgot-password'" class="link">Privacy policy</a>
+    <a [routerLink]="'/static/privacy-policy'" class="link" target="_blank">Privacy policy</a>
   </base-boolean-field>
 
   <button class="auth-form__button" color="primary" mat-flat-button>{{ 'BUTTON_NAME.SIGN_UP' | translate }}</button>
