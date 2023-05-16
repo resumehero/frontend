@@ -4,10 +4,23 @@
       <a routerLink="/">
         <mat-icon class="side-menu__logo" svgIcon="logo"></mat-icon>
       </a>
-      <button (click)="toggleSize($event)" [style.top.px]="headerEl.offsetHeight + 13" class="side-menu__size-button" mat-icon-button>
+      <button
+        *ngIf="false"
+        (click)="toggleSize($event)"
+        [style.top.px]="headerEl.offsetHeight + 13"
+        class="side-menu__size-button"
+        mat-icon-button
+      >
         <mat-icon class="side-menu__size-button-icon">{{ collapseButtonIcon }}</mat-icon>
       </button>
     </header>
+
+    <mat-divider class="side-menu__divider"></mat-divider>
+
+    <button class="side-menu__add-btn" mat-flat-button [color]="'primary'">
+      <mat-icon [svgIcon]="'plus-small'"></mat-icon>
+      Create resume
+    </button>
     <nav class="side-menu__navigation">
       <ng-container *ngFor="let item of navItems">
         <ng-container *showForRoles="item.roles">
@@ -16,8 +29,8 @@
               <ng-container *ngTemplateOutlet="navItemTemplate; context: { $implicit: item }"></ng-container>
             </ng-container>
             <mat-expansion-panel
-              *ngIf="item?.children?.length"
               (click)="isCollapsed = false"
+              *ngIf="item?.children?.length"
               [expanded]="!isCollapsed"
               class="side-menu__expansion-panel"
             >
@@ -25,10 +38,10 @@
                 <span class="side-menu__item-content">
                   <mat-icon
                     *ngIf="item.icon"
-                    [svgIcon]="item.icon"
                     [matTooltip]="isCollapsed ? (item.title | translate) : null"
-                    matTooltipPosition="right"
+                    [svgIcon]="item.icon"
                     class="side-menu__item-icon"
+                    matTooltipPosition="right"
                   ></mat-icon>
                   <span class="side-menu__item-text">{{ item.title | translate }}</span>
                 </span>
@@ -48,20 +61,13 @@
         </ng-container>
       </ng-container>
     </nav>
-    <footer class="side-menu__footer">
-      <article *ngIf="user" class="side-menu__user">
-        <avatar class="side-menu__img-wrap" [src]="user.avatar?.uri" [name]="user.fullName" size="var(--avatar-size)"></avatar>
-        <h3 class="side-menu__user-name">{{ user.fullName }}</h3>
-        <h3 class="side-menu__user-role">{{ 'USER_ROLE.' + user.role | uppercase | translate }}</h3>
-      </article>
 
+    <footer class="side-menu__footer">
       <div class="side-menu__actions">
-        <button [routerLink]="'/profile'" mat-icon-button>
-          <mat-icon class="side-menu__item-icon">settings</mat-icon>
-        </button>
-        <button (click)="logout()" mat-icon-button>
-          <mat-icon class="side-menu__item-icon">logout</mat-icon>
-        </button>
+        <a class="side-menu__action" mat-button (click)="logout()">
+          <mat-icon [svgIcon]="'sign-out'" class="side-menu__item-icon"></mat-icon>
+          Log Out
+        </a>
       </div>
     </footer>
   </div>
@@ -76,10 +82,10 @@
     >
       <span class="side-menu__item-content">
         <mat-icon
-          [svgIcon]="item.icon"
           [matTooltip]="isCollapsed ? (item.title | translate) : null"
-          matTooltipPosition="right"
+          [svgIcon]="item.icon"
           class="side-menu__item-icon"
+          matTooltipPosition="right"
         ></mat-icon>
         <span class="side-menu__item-text">{{ item.title | translate }}</span>
       </span>

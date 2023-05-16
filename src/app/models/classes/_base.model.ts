@@ -3,22 +3,20 @@ import { transformToDate } from '@misc/helpers/model-conversion/transform-helper
 
 @Exclude()
 export abstract class AbstractModel {
-  @Expose({ name: '@id' })
-  iri: string;
   @Expose()
   id: string;
   @Expose()
   @Transform(transformToDate)
-  createdAt: Date;
+  createdAt: string;
   @Expose()
   @Transform(transformToDate)
-  updatedAt: Date;
+  updatedAt?: string;
 
-  [Symbol.toPrimitive](hint: 'number' | 'string' | 'default'): string | number | void {
+  [Symbol.toPrimitive]?(hint: 'number' | 'string' | 'default'): string | number | void {
     switch (hint) {
       case 'default':
       case 'string':
-        return this.iri;
+        return this.id;
       case 'number':
       default:
         return;

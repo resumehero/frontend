@@ -9,6 +9,6 @@ import { SideMenuComponent } from './side-menu/side-menu.component';
 @NgModule({
   declarations: [MainLayoutComponent, ToolbarComponent, SideMenuComponent],
   imports: [CommonModule, RouterModule, SharedModule],
-  exports: [MainLayoutComponent]
+  exports: [MainLayoutComponent, ToolbarComponent]
 })
 export class MainLayoutModule {}

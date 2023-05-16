@@ -1,5 +1,6 @@
 import { Component, TemplateRef } from '@angular/core';
 import { ToolbarHelperService } from '@services/toolbar-helper/toolbar-helper.service';
+import { INavLink } from '@models/interfaces/nav-link.interface';
 
 @Component({
   selector: 'toolbar',
@@ -7,6 +8,14 @@ import { ToolbarHelperService } from '@services/toolbar-helper/toolbar-helper.se
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent {
+  get pageName(): string {
+    return this._toolbarHelper.pageName;
+  }
+
+  get navLinks(): INavLink[] {
+    return this._toolbarHelper.navLinks;
+  }
+
   get template(): TemplateRef<any> | null {
     return this._toolbarHelper.template;
   }

@@ -1,0 +1,119 @@
+<form class="profile">
+  <section class="profile__section">
+    <div class="profile__section-title">
+      <h4 class="profile__title">General</h4>
+    </div>
+
+    <div class="profile__section-content">
+      <div class="profile__section-form">
+        <div class="profile__form-row">
+          <file-uploader
+            [control]="this.getControl('avatar')"
+            [icon]="'camera'"
+            [previewWidth]="100"
+            [previewHeight]="100"
+            class="profile__form-field profile__form-field_full-width"
+            [placeholder]="'Add your photo\n(you can upload .jpg .png, less than 5 Mb)'"
+          ></file-uploader>
+          <base-form-input [control]="form.firstName" class="profile__form-field" placeholder="First name"></base-form-input>
+          <base-form-input [control]="form.lastName" class="profile__form-field" placeholder="Last name"></base-form-input>
+          <base-form-input [control]="form.email" class="profile__form-field" placeholder="Email address"></base-form-input>
+          <base-form-input [control]="form.phone" class="profile__form-field" placeholder="Phone number"></base-form-input>
+          <base-select
+            [control]="form.industry"
+            [options]="industryOptions"
+            class="profile__form-field"
+            placeholder="Industry"
+          ></base-select>
+        </div>
+
+        <div class="profile__section-actions"></div>
+      </div>
+    </div>
+  </section>
+
+  <ng-container *ngFor="let section of formSections">
+    <ng-container *ngTemplateOutlet="sectionTemplate; context: section"></ng-container>
+  </ng-container>
+
+  <button [color]="'primary'" class="profile__button" mat-flat-button>Save changes</button>
+</form>
+
+<ng-template #sectionTemplate let-addBtnName="addBtnName" let-fieldsTemplate="fieldsTemplate" let-listName="listName" let-title="title">
+  <section class="profile__section">
+    <div class="profile__section-title">
+      <h4 class="profile__title">{{ title }}</h4>
+    </div>
+
+    <div class="profile__section-content">
+      <div *ngFor="let item of getArrayControls(listName); let idx = index" class="profile__section-form">
+        <div class="profile__form-row">
+          <ng-container *ngTemplateOutlet="fieldsTemplate; context: { $implicit: item }"></ng-container>
+        </div>
+
+        <div class="profile__section-actions">
+          <button (click)="deleteRow(listName, idx)" [color]="'warn'" mat-stroked-button type="button">
+            <mat-icon [svgIcon]="'trash'"></mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <button (click)="addRow(listName)" [color]="'primary'" class="profile__add-btn" mat-button type="button">
+        <mat-icon [svgIcon]="'plus-small'"></mat-icon>
+        {{ addBtnName }}
+      </button>
+    </div>
+  </section>
+</ng-template>
+
+<ng-template #accomplishmentsTemplate let-item>
+  <ng-container *ngIf="asArrayItemControls(item) as controls">
+    <base-form-input
+      [control]="controls.accomplishments"
+      class="profile__form-field profile__form-field_full-width"
+      placeholder="Professional accomplishments"
+    ></base-form-input>
+  </ng-container>
+</ng-template>
+
+<ng-template #workTemplate let-item>
+  <ng-container *ngIf="asArrayItemControls(item) as controls">
+    <base-form-input [control]="controls.jobTitle" class="profile__form-field" placeholder="Job Title"></base-form-input>
+    <base-form-input [control]="controls.employer" class="profile__form-field" placeholder="Employer"></base-form-input>
+    <base-datepicker [control]="controls.startDate" class="profile__form-field" placeholder="Start Date"></base-datepicker>
+    <base-datepicker [control]="controls.endDate" class="profile__form-field" placeholder="End Date"></base-datepicker>
+    <base-textarea
+      [control]="controls.description"
+      class="profile__form-field profile__form-field_full-width"
+      placeholder="Description"
+    ></base-textarea>
+  </ng-container>
+</ng-template>
+
+<ng-template #educationTemplate let-item>
+  <ng-container *ngIf="asArrayItemControls(item) as controls">
+    <base-form-input [control]="controls.degree" class="profile__form-field" placeholder="Degree"></base-form-input>
+    <base-form-input [control]="controls.school" class="profile__form-field" placeholder="School"></base-form-input>
+    <base-datepicker [control]="controls.startDate" class="profile__form-field" placeholder="Start Date"></base-datepicker>
+    <base-datepicker [control]="controls.endDate" class="profile__form-field" placeholder="End Date"></base-datepicker>
+    <base-textarea
+      [control]="controls.description"
+      class="profile__form-field profile__form-field_full-width"
+      placeholder="Description"
+    ></base-textarea>
+  </ng-container>
+</ng-template>
+
+<ng-template #certificationsTemplate let-item>
+  <ng-container *ngIf="asArrayItemControls(item) as controls">
+    <base-form-input [control]="controls.certification" class="profile__form-field" placeholder="Certification"></base-form-input>
+    <base-datepicker [control]="controls.date" class="profile__form-field" placeholder="Date"></base-datepicker>
+  </ng-container>
+</ng-template>
+
+<ng-template #skillsTemplate let-item>
+  <ng-container *ngIf="asArrayItemControls(item) as controls">
+    <base-form-input [control]="controls.name" class="profile__form-field" placeholder="Skill"></base-form-input>
+    <base-select [control]="controls.level" [options]="skillLevelOptions" class="profile__form-field" placeholder="Level"></base-select>
+  </ng-container>
+</ng-template>

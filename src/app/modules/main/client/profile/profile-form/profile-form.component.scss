@@ -1,0 +1,55 @@
+.profile {
+  $side-gap: 28rem;
+
+  &__section {
+    display: flex;
+    gap: 2rem;
+    border-bottom: 1px solid rgba(56, 56, 138, 12%);
+    margin-bottom: 2rem;
+  }
+
+  &__section-title {
+    flex-basis: $side-gap;
+  }
+
+  &__title {
+    font-weight: var(--fw-medium);
+  }
+
+  &__section-content {
+    flex-grow: 1;
+  }
+
+  &__section-form {
+    display: flex;
+    gap: 2rem;
+  }
+
+  &__form-row {
+    display: grid;
+    column-gap: 2rem;
+    grid-template-columns: 1fr 1fr;
+    flex-grow: 1;
+  }
+
+  &__section-actions {
+    flex-basis: $side-gap;
+  }
+
+  &__form-field {
+    &_full-width {
+      grid-column: span 2;
+    }
+  }
+
+  &__add-btn {
+    text-decoration: underline;
+    margin-bottom: 2rem;
+  }
+
+  &__button {
+    --button-padding: 0 3rem;
+    display: block;
+    margin: 0 auto;
+  }
+}
