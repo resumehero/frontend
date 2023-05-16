@@ -15,8 +15,8 @@ export class FileUploaderComponent extends AbstractFileUploaderComponent impleme
   protected _fileApi: FileApiService = inject(FileApiService);
   @Input() previewHeight: number = 160;
   @Input() previewWidth: number = 225;
-  @Input() actionsYPosition: 'start' | 'end' = 'end';
   @Input() actionsXPosition: 'start' | 'end' = 'end';
+  @Input() actionsYPosition: 'start' | 'end' = 'end';
   @Input() actionsColor: ThemePalette = 'primary';
 
   get actionsPositionClasses(): string[] {

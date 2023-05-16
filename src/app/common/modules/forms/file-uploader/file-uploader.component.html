@@ -1,53 +1,58 @@
 <div class="file-uploader">
-  <mat-label *ngIf="withLabel">{{ placeholder }}</mat-label>
   <div
-    class="file-uploader__panel"
-    dndFile
-    (fileDropped)="fileChangeHandler($event)"
-    [class.error]="isFileError"
     (fileDragleave)="fileDragleave.emit($event)"
     (fileDragover)="fileDragover.emit($event)"
+    (fileDropped)="fileChangeHandler($event)"
+    [class.error]="isFileError"
+    [class.selected]="selectFile?.length"
+    [style.display]="multiple || (!multiple && !selectFile.length) ? null : 'none'"
     [style.height]="previewHeight + 'px'"
     [style.width]="previewWidth + 'px'"
-    [style.display]="multiple || (!multiple && !selectFile.length) ? null : 'none'"
+    class="file-uploader__panel"
+    dndFile
   >
     <input
       #fileInput
-      type="file"
+      (change)="fileChangeHandler(getFiles($event))"
       [accept]="fileType"
       [multiple]="multiple"
       class="file-uploader__input"
-      (change)="fileChangeHandler(getFiles($event))"
+      type="file"
     />
-    <p class="file-uploader__title" *ngIf="placeholder">{{ placeholder | translate }}</p>
-  </div>
-  <ul *ngIf="selectFile?.length" class="file-uploader__list">
-    <li
-      *ngFor="let file of selectFile; let idx = index"
-      class="file-uploader__file-item"
-      [class.error]="isFileMaxSize(file) || filesWithError.has(file.name)"
-      [style.height]="previewHeight + 'px'"
-      [style.width]="previewWidth + 'px'"
-    >
-      <mat-spinner class="file-uploader__loader" *ngIf="filesOnLoading.has(file.name)" [diameter]="20"></mat-spinner>
-      <img
-        class="file-uploader__preview"
-        [width]="previewWidth"
-        [height]="previewHeight"
-        [src]="getNativeFileUrl(file)"
-        [alt]="file.name"
-      />
-      <div class="file-uploader__file-actions" [ngClass]="actionsPositionClasses" *ngIf="!filesOnLoading.has(file.name)">
-        <button *ngIf="!multiple" class="file-uploader__action" [color]="actionsColor" mat-icon-button (click)="chooseAnotherFile()">
-          <mat-icon svgIcon="refresh"></mat-icon>
-        </button>
-        <button class="file-uploader__action" [color]="actionsColor" mat-icon-button (click)="removeFile(idx, $event)">
-          <mat-icon svgIcon="delete"></mat-icon>
+    <mat-icon [svgIcon]="icon" class="file-uploader__icon"></mat-icon>
+    <ng-container *ngIf="selectFile?.[0] as file">
+      <img *ngIf="selectFile.length" [src]="getNativeFileUrl(file)" alt="Image" class="file-uploader__preview" />
+      <div *ngIf="!filesOnLoading.has(file.name)" [ngClass]="actionsPositionClasses" class="file-uploader__file-actions">
+        <button (click)="removeFile(0, $event)" [color]="actionsColor" class="file-uploader__action" mat-icon-button>
+          <mat-icon svgIcon="trash"></mat-icon>
         </button>
       </div>
-    </li>
-  </ul>
-  <mat-error class="file-uploader__error" *ngIf="isFileError">
+    </ng-container>
+  </div>
+
+  <div class="file-uploader__info">
+    <p *ngIf="placeholder" class="file-uploader__title">{{ placeholder | translate }}</p>
+  </div>
+  <!--  <ul *ngIf="selectFile?.length" class="file-uploader__list">-->
+  <!--    <li-->
+  <!--      *ngFor="let file of selectFile; let idx = index"-->
+  <!--      class="file-uploader__file-item"-->
+  <!--      [class.error]="isFileMaxSize(file) || filesWithError.has(file.name)"-->
+  <!--      [style.height]="previewHeight + 'px'"-->
+  <!--      [style.width]="previewWidth + 'px'"-->
+  <!--    >-->
+  <!--      <mat-spinner class="file-uploader__loader" *ngIf="filesOnLoading.has(file.name)" [diameter]="20"></mat-spinner>-->
+  <!--      <img-->
+  <!--        class="file-uploader__preview"-->
+  <!--        [width]="previewWidth"-->
+  <!--        [height]="previewHeight"-->
+  <!--        [src]="getNativeFileUrl(file)"-->
+  <!--        [alt]="file.name"-->
+  <!--      />-->
+
+  <!--    </li>-->
+  <!--  </ul>-->
+  <mat-error *ngIf="isFileError" class="file-uploader__error">
     {{ fileErrorMessage }}
   </mat-error>
 </div>

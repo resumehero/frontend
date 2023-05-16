@@ -38,6 +38,16 @@
         height: var(--icon-size);
       }
     }
+
+    &.mat-mdc-outlined-button {
+      .mat-icon {
+        margin: 0;
+      }
+
+      &.mat-warn {
+        border-color: var(--color-warn);
+      }
+    }
   }
 
   mat-icon.mat-icon {
