@@ -1,27 +1,20 @@
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { catchError, first, switchMap } from 'rxjs/operators';
-import { AuthService } from '@services/auth/auth.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
 import { UserApiService } from '@services/api/user-api/user-api.service';
+import { ACTIVATION_TOKEN_KEY, ACTIVATION_UID_KEY } from '@misc/constants/_base.constant';
+import { HttpServiceError } from '@services/http/http-service-error.class';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfirmationTokenResolver implements Resolve<Observable<string> | void> {
-  private _auth: AuthService = inject(AuthService);
   private _userApi: UserApiService = inject(UserApiService);
 
-  resolve({ queryParamMap }: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<string> | void {
-    return this._auth.getTemporaryToken().pipe(
-      first(),
-      switchMap(
-        (): Observable<string> =>
-          this._userApi
-            .confirmAccount(queryParamMap.get('token') as string)
-            .pipe(catchError(({ error }: HttpErrorResponse): Observable<string> => of(error.message)))
-      )
-    );
+  resolve({ paramMap }: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<string> | void {
+    return this._userApi
+      .confirmAccount(paramMap.get(ACTIVATION_UID_KEY), paramMap.get(ACTIVATION_TOKEN_KEY))
+      .pipe(catchError(({ descriptions }: HttpServiceError): Observable<string> => of(descriptions[0]?.message)));
   }
 }

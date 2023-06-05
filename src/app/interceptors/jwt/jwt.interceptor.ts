@@ -56,7 +56,7 @@ export class JwtInterceptor implements HttpInterceptor {
   }
 
   private _fetchToken(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const observable$: Observable<any> = this._auth.token?.refresh ? this._auth.refreshToken() : this._auth.getTemporaryToken();
+    const observable$: Observable<any> = this._auth.token?.refresh ? this._auth.refreshToken() : of(null);
 
     return observable$.pipe(
       catchError((error: HttpErrorResponse): never => {

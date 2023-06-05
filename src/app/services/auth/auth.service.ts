@@ -1,10 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { HttpRequest } from '@angular/common/http';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { Token } from '@models/classes/tokens.model';
-import { IApiTokens } from '@models/interfaces/api-tokens.interface';
-import { APP_CONFIG, IAppConfig } from '@misc/constants/app-config.constant';
 import { User } from '@models/classes/user/user.model';
 import { UserRole } from '@models/enums/user-role.enum';
 import { HttpService, IServicesConfig } from '@services/http/http.service';
@@ -13,14 +11,12 @@ import { plainToClass } from 'class-transformer';
 import { UserApiService } from '@services/api/user-api/user-api.service';
 import { StorageKey } from '@models/enums/storage-key.enum';
 import { ILoginParams } from '@models/interfaces/login-params.interface';
-import { GrantType } from '@models/enums/grant-type.enum';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   me$: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
-  private _config: IAppConfig = inject<IAppConfig>(APP_CONFIG);
   private _http: HttpService = inject(HttpService);
   private _storage: StorageService = inject(StorageService);
   private _userApi: UserApiService = inject(UserApiService);
@@ -41,53 +37,22 @@ export class AuthService {
     return this.me$.value;
   }
 
-  getTemporaryToken(services?: IServicesConfig): Observable<Token | undefined> {
-    const { apiUrl, client_id: clientId, client_secret: clientSecret }: IAppConfig = this._config;
-    const form: FormData = new FormData();
-
-    form.append('grant_type', GrantType.clientCredentials);
-    form.append('client_id', clientId);
-    form.append('client_secret', clientSecret);
-
-    return this._http.post(`${apiUrl}/oauth/token`, form, {}, services).pipe(map(this._onTokenResponse.bind(this)));
-  }
-
-  login(
-    { username, password, grantType = GrantType.password, code }: ILoginParams,
-    shouldRemember: boolean,
-    services?: IServicesConfig
-  ): Observable<User> {
-    const { apiUrl, client_id: clientId, client_secret: clientSecret }: IAppConfig = this._config;
+  login({ username: email, password, code }: ILoginParams, shouldRemember: boolean, services?: IServicesConfig): Observable<User> {
     this._storage.shouldUseLocalstorage = shouldRemember;
-    const form: FormData = new FormData();
-
-    form.append('grant_type', grantType ?? GrantType.password);
-    form.append('client_id', clientId);
-    form.append('client_secret', clientSecret);
-    form.append('username', username as string);
-    form.append('password', password as string);
 
     return this._http
-      .post(`${apiUrl}/oauth/token`, form, {}, services)
+      .post(`/auth/jwt/create`, { email, password }, {}, services)
       .pipe(map(this._onTokenResponse.bind(this)), switchMap(this.getMe.bind(this)));
   }
 
   refreshToken(): Observable<any> {
-    const { apiUrl, client_id: clientId, client_secret: clientSecret }: IAppConfig = this._config;
-    const form: FormData = new FormData();
-
-    form.append('grant_type', GrantType.refreshToken);
-    form.append('client_id', clientId);
-    form.append('client_secret', clientSecret);
-    form.append('refresh_token', (this.token as Token).refresh);
-
     return this._http
-      .post(`${apiUrl}/oauth/token`, form, {}, {})
+      .post(`/auth/jwt/refresh`, { refresh: this.token.refresh }, {}, {})
       .pipe(map(this._onTokenResponse.bind(this)), switchMap(this.getMe.bind(this)));
   }
 
   logout(): Observable<void> {
-    return this._userApi.logout().pipe(tap((): void => this.clearTokens()));
+    return of(this.clearTokens());
   }
 
   clearTokens(): void {
@@ -121,15 +86,15 @@ export class AuthService {
   }
 
   markTokensAsRevoked(): void {
-    const token: Token = this._storage.get<Token>(StorageKey.tokens);
+    const token: Token = this._storage.get<Token>(StorageKey.tokens) || ({} as Token);
     token.isRevoked = true;
     this._storage.set(StorageKey.tokens, token);
   }
 
-  private _onTokenResponse(res: IApiTokens): Token | undefined {
+  private _onTokenResponse(res: Token): Token | undefined {
     let tokens: Token | undefined;
 
-    if (res.access_token) {
+    if (res.access) {
       tokens = plainToClass(Token, res);
       this._storage.set(StorageKey.tokens, tokens);
     }

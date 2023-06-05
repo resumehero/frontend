@@ -11,15 +11,11 @@ import { UserTokenAction } from '@models/enums/user-token-action.enum';
   providedIn: 'root'
 })
 export class UserApiService extends AbstractApiService<User> {
-  protected readonly _URL_PATH: string = '/api/users';
+  protected readonly _URL_PATH: string = '/auth/users';
   protected readonly _MODEL: ClassConstructor<User> = User;
 
   getMe(services?: IServicesConfig): Observable<User> {
     return this.getItem('me', {}, services);
-  }
-
-  logout(services?: IServicesConfig): Observable<void> {
-    return this._http.patch(`${this.url}/logout`, null, {}, services);
   }
 
   availableEmail(email: string, services?: IServicesConfig): Observable<any> {
@@ -34,7 +30,7 @@ export class UserApiService extends AbstractApiService<User> {
     return this._http.patch(`${this.url}/${token}/password`, { user: params }, {}, services);
   }
 
-  confirmAccount(token: string, services?: IServicesConfig): Observable<any> {
-    return this._http.patch(`${this.url}/${token}/confirm`, { user: { confirmed: true } }, {}, services);
+  confirmAccount(uid: string, token: string, services?: IServicesConfig): Observable<any> {
+    return this._http.post(`${this.url}/activation`, { uid, token }, {}, services);
   }
 }

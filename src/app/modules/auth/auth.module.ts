@@ -13,6 +13,7 @@ import { ConfirmationEmailGuard } from '@guards/confirmation-email/confirmation-
 import { ConfirmationTokenResolver } from '@resolvers/confirmation-token/confirmation-token.resolver';
 import { AuthLayoutComponent } from '@layouts/auth/auth-layout.component';
 import { AuthLayoutModule } from '@layouts/auth/auth-layout.module';
+import { ACTIVATION_TOKEN_KEY, ACTIVATION_UID_KEY } from '@misc/constants/_base.constant';
 
 const routes: Routes = [
   {
@@ -32,7 +33,7 @@ const routes: Routes = [
         component: ForgotPasswordComponent
       },
       {
-        path: 'confirmation-email',
+        path: `activate/:${ACTIVATION_UID_KEY}/:${ACTIVATION_TOKEN_KEY}`,
         component: ConfirmationEmailComponent,
         canActivate: [ConfirmationEmailGuard],
         resolve: {

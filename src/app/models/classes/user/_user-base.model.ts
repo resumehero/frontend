@@ -7,6 +7,7 @@ import { transformToModel } from '@misc/helpers/model-conversion/transform-helpe
 @Exclude()
 export class UserBase extends AbstractModel {
   @Expose()
+  @Transform(({ value }: TransformFnParams): string => value ?? UserRole.client)
   role: UserRole;
   @Expose()
   email: string;
