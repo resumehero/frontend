@@ -23,7 +23,6 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._auth.clearTokens();
-    this._auth.getTemporaryToken().subscribe();
   }
 
   ngOnDestroy(): void {

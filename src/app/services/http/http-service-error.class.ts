@@ -34,6 +34,8 @@ export class HttpServiceError extends HttpErrorResponse {
       key = this.error.error;
     }
 
+    message = message || 'Something went wrong';
+
     return { key: key ?? message.replace(/\s/gm, '_').replace(/\W/gm, ''), message };
   }
 

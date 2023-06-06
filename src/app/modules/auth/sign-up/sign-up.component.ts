@@ -22,13 +22,15 @@ export class SignUpComponent extends AbstractFormComponent {
       return;
     }
 
-    this._userApi.createItem(this.formGroup.getRawValue()).subscribe((): Promise<boolean> => this._router.navigate(['']));
+    const { email, password } = this.formGroup.getRawValue();
+
+    this._userApi.createItem({ email, password }).subscribe((): Promise<boolean> => this._router.navigate(['']));
   }
 
   protected override _initForm(): void {
     this.formGroup = this._fb.group(
       {
-        username: new FormControl('', [Validators.required, VALIDATORS_SET.EMAIL]),
+        email: new FormControl('', [Validators.required, VALIDATORS_SET.EMAIL]),
         password: new FormControl('', [Validators.required, VALIDATORS_SET.PASSWORD]),
         repeatPassword: new FormControl('', [Validators.required, VALIDATORS_SET.PASSWORD])
       },

@@ -34,8 +34,8 @@ export class UserModalComponent extends AbstractFormComponent implements OnInit 
 
   get defaultValues(): IFormValues {
     return {
-      firstName: this.user?.firstName ?? '',
-      lastName: this.user?.lastName ?? '',
+      firstName: this.user?.first_name ?? '',
+      lastName: this.user?.last_name ?? '',
       email: this.user?.email ?? '',
       role: this.user?.role
     };

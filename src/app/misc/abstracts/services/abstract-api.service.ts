@@ -24,18 +24,13 @@ export interface ITransitData {
   providedIn: 'root'
 })
 export abstract class AbstractApiService<T extends AbstractModel> {
-  protected _config: IAppConfig = inject<IAppConfig>(APP_CONFIG);
   protected _http: HttpService = inject(HttpService);
   protected _URLParams: string[] = [];
   protected abstract readonly _MODEL: ClassConstructor<T>;
   protected abstract readonly _URL_PATH: string;
 
-  get baseUrl(): string {
-    return this._config.apiUrl;
-  }
-
   get url(): string {
-    return this.baseUrl + this._composeUrlPath();
+    return this._composeUrlPath();
   }
 
   getItems(params?: Params, servicesConfig?: IServicesConfig): Observable<List<T>> {

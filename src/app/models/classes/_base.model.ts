@@ -1,16 +1,9 @@
-import { Exclude, Expose, Transform } from 'class-transformer';
-import { transformToDate } from '@misc/helpers/model-conversion/transform-helpers/transform-to-date.function';
+import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
 export abstract class AbstractModel {
   @Expose()
   id: string;
-  @Expose()
-  @Transform(transformToDate)
-  createdAt: string;
-  @Expose()
-  @Transform(transformToDate)
-  updatedAt?: string;
 
   [Symbol.toPrimitive]?(hint: 'number' | 'string' | 'default'): string | number | void {
     switch (hint) {

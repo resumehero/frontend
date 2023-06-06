@@ -10,15 +10,15 @@
           <file-uploader
             [control]="this.getControl('avatar')"
             [icon]="'camera'"
-            [previewWidth]="100"
-            [previewHeight]="100"
-            class="profile__form-field profile__form-field_full-width"
             [placeholder]="'Add your photo\n(you can upload .jpg .png, less than 5 Mb)'"
+            [previewHeight]="100"
+            [previewWidth]="100"
+            class="profile__form-field profile__form-field_full-width"
           ></file-uploader>
-          <base-form-input [control]="form.firstName" class="profile__form-field" placeholder="First name"></base-form-input>
-          <base-form-input [control]="form.lastName" class="profile__form-field" placeholder="Last name"></base-form-input>
+          <base-form-input [control]="form.first_name" class="profile__form-field" placeholder="First name"></base-form-input>
+          <base-form-input [control]="form.last_name" class="profile__form-field" placeholder="Last name"></base-form-input>
           <base-form-input [control]="form.email" class="profile__form-field" placeholder="Email address"></base-form-input>
-          <base-form-input [control]="form.phone" class="profile__form-field" placeholder="Phone number"></base-form-input>
+          <base-form-input [control]="form.phone_number" class="profile__form-field" placeholder="Phone number"></base-form-input>
           <base-select
             [control]="form.industry"
             [options]="industryOptions"
@@ -36,7 +36,9 @@
     <ng-container *ngTemplateOutlet="sectionTemplate; context: section"></ng-container>
   </ng-container>
 
-  <button [color]="'primary'" class="profile__button" mat-flat-button>Save changes</button>
+  <button (click)="submitForm()" [color]="'primary'" [disabled]="!formGroup.dirty" class="profile__button" mat-flat-button>
+    Save changes
+  </button>
 </form>
 
 <ng-template #sectionTemplate let-addBtnName="addBtnName" let-fieldsTemplate="fieldsTemplate" let-listName="listName" let-title="title">
@@ -69,7 +71,7 @@
 <ng-template #accomplishmentsTemplate let-item>
   <ng-container *ngIf="asArrayItemControls(item) as controls">
     <base-form-input
-      [control]="controls.accomplishments"
+      [control]="controls.description"
       class="profile__form-field profile__form-field_full-width"
       placeholder="Professional accomplishments"
     ></base-form-input>
@@ -78,10 +80,10 @@
 
 <ng-template #workTemplate let-item>
   <ng-container *ngIf="asArrayItemControls(item) as controls">
-    <base-form-input [control]="controls.jobTitle" class="profile__form-field" placeholder="Job Title"></base-form-input>
+    <base-form-input [control]="controls.job_title" class="profile__form-field" placeholder="Job Title"></base-form-input>
     <base-form-input [control]="controls.employer" class="profile__form-field" placeholder="Employer"></base-form-input>
-    <base-datepicker [control]="controls.startDate" class="profile__form-field" placeholder="Start Date"></base-datepicker>
-    <base-datepicker [control]="controls.endDate" class="profile__form-field" placeholder="End Date"></base-datepicker>
+    <base-datepicker [control]="controls.start_date" class="profile__form-field" placeholder="Start Date"></base-datepicker>
+    <base-datepicker [control]="controls.end_date" class="profile__form-field" placeholder="End Date"></base-datepicker>
     <base-textarea
       [control]="controls.description"
       class="profile__form-field profile__form-field_full-width"
@@ -93,9 +95,9 @@
 <ng-template #educationTemplate let-item>
   <ng-container *ngIf="asArrayItemControls(item) as controls">
     <base-form-input [control]="controls.degree" class="profile__form-field" placeholder="Degree"></base-form-input>
-    <base-form-input [control]="controls.school" class="profile__form-field" placeholder="School"></base-form-input>
-    <base-datepicker [control]="controls.startDate" class="profile__form-field" placeholder="Start Date"></base-datepicker>
-    <base-datepicker [control]="controls.endDate" class="profile__form-field" placeholder="End Date"></base-datepicker>
+    <base-form-input [control]="controls.institution_name" class="profile__form-field" placeholder="School"></base-form-input>
+    <base-datepicker [control]="controls.start_date" class="profile__form-field" placeholder="Start Date"></base-datepicker>
+    <base-datepicker [control]="controls.end_date" class="profile__form-field" placeholder="End Date"></base-datepicker>
     <base-textarea
       [control]="controls.description"
       class="profile__form-field profile__form-field_full-width"
@@ -106,7 +108,7 @@
 
 <ng-template #certificationsTemplate let-item>
   <ng-container *ngIf="asArrayItemControls(item) as controls">
-    <base-form-input [control]="controls.certification" class="profile__form-field" placeholder="Certification"></base-form-input>
+    <base-form-input [control]="controls.name" class="profile__form-field" placeholder="Certification"></base-form-input>
     <base-datepicker [control]="controls.date" class="profile__form-field" placeholder="Date"></base-datepicker>
   </ng-container>
 </ng-template>

@@ -1,18 +1,13 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Transform } from 'class-transformer';
 import { AbstractModel } from '@models/classes/_base.model';
-
-export enum SkillLevel {
-  Novice = 'novice',
-  Beginner = 'beginner',
-  Competent = 'competent',
-  Proficient = 'proficient',
-  Expert = 'expert'
-}
+import { SkillLevel } from '@models/classes/skill-level.model';
+import { transformToModel } from '@misc/helpers/model-conversion/transform-helpers/transform-to-model.function';
 
 @Exclude()
 export class Skill extends AbstractModel {
   @Expose()
   name: string;
   @Expose()
+  @Transform(transformToModel(SkillLevel))
   level: SkillLevel;
 }

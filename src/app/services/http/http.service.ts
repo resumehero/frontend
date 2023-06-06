@@ -1,12 +1,13 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { LoaderService, LoaderType } from '@services/loader/loader.service';
-import { IErrorDescription, HttpServiceError } from '@services/http/http-service-error.class';
+import { HttpServiceError, IErrorDescription } from '@services/http/http-service-error.class';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { IHttpRequestOptions } from '@models/interfaces/http-request-options.interface';
+import { APP_CONFIG, IAppConfig } from '@misc/constants/app-config.constant';
 
 export interface IServicesConfig {
   skipErrorNotification?: ((err: HttpServiceError) => boolean) | boolean;
@@ -23,17 +24,18 @@ export class HttpService extends HttpClient {
   private _notification: ToastrService = inject(ToastrService);
   private _loader: LoaderService = inject(LoaderService);
   private _translate: TranslateService = inject(TranslateService);
+  private _config: IAppConfig = inject<IAppConfig>(APP_CONFIG);
+  private _apiVersion: string = 'v1';
+
+  get apiUrl(): string {
+    return `${this._config.apiUrl}/api/${this._apiVersion}`;
+  }
 
   override get(url: string, options?: IHttpRequestOptions, services?: IServicesConfig | undefined): Observable<any> {
     this._startLoader(services);
-    const httpOptions: IHttpRequestOptions = {
-      headers: new HttpHeaders({
-        Accept: 'application/ld+json'
-      })
-    };
 
     return super
-      .get(url, { ...httpOptions, ...options } as IHttpRequestOptions)
+      .get(this.apiUrl + url, options as IHttpRequestOptions)
       .pipe(
         tap(this._onSuccess.bind(this, services)),
         catchError(this._onError.bind(this, services)),
@@ -45,7 +47,7 @@ export class HttpService extends HttpClient {
     this._startLoader(services);
 
     return super
-      .post(url, body, options)
+      .post(this.apiUrl + url, body, options)
       .pipe(
         tap(this._onSuccess.bind(this, services)),
         catchError(this._onError.bind(this, services)),
@@ -55,13 +57,8 @@ export class HttpService extends HttpClient {
 
   override patch(url: string, body: any | null, options?: IHttpRequestOptions, services?: IServicesConfig | undefined): Observable<any> {
     this._startLoader(services);
-    const httpOptions: { headers: HttpHeaders } = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/merge-patch+json'
-      })
-    };
     return super
-      .patch(url, body, { ...httpOptions, ...options })
+      .patch(this.apiUrl + url, body, options)
       .pipe(
         tap(this._onSuccess.bind(this, services)),
         catchError(this._onError.bind(this, services)),
@@ -73,7 +70,7 @@ export class HttpService extends HttpClient {
     this._startLoader(services);
 
     return super
-      .delete(url, options)
+      .delete(this.apiUrl + url, options)
       .pipe(
         tap(this._onSuccess.bind(this, services)),
         catchError(this._onError.bind(this, services)),
@@ -85,7 +82,7 @@ export class HttpService extends HttpClient {
     this._startLoader(services);
 
     return super
-      .put(url, body, options)
+      .put(this.apiUrl + url, body, options)
       .pipe(
         tap(this._onSuccess.bind(this, services)),
         catchError(this._onError.bind(this, services)),
@@ -107,7 +104,7 @@ export class HttpService extends HttpClient {
       !(typeof config.skipErrorNotification === 'boolean' ? config.skipErrorNotification : config.skipErrorNotification?.(customError))
     ) {
       customError.descriptions.forEach(({ key, message }: IErrorDescription): void => {
-        const notificationMessage: string = key ? this._translate.instant(`BACKEND_ERRORS.${key.toUpperCase()}`) : message;
+        const notificationMessage: string = message;
 
         this._notification.error(notificationMessage);
       });

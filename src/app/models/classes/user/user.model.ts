@@ -17,7 +17,7 @@ export class User extends UserBase {
 
   @Expose()
   @Transform(transformToModelsArray(WorkExperience))
-  workExperience: WorkExperience[];
+  work_experiences: WorkExperience[];
 
   @Expose()
   @Transform(transformToModelsArray(Accomplishment))
@@ -25,7 +25,7 @@ export class User extends UserBase {
 
   @Expose()
   @Transform(transformToModelsArray(Education))
-  education: Education[];
+  educations: Education[];
 
   @Expose()
   @Transform(transformToModelsArray(Certification))
