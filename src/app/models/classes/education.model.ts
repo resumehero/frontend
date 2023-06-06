@@ -1,16 +1,19 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Transform } from 'class-transformer';
 import { AbstractModel } from '@models/classes/_base.model';
+import { transformToDateString } from '@misc/helpers/model-conversion/transform-helpers/transform-to-date.function';
 
 @Exclude()
 export class Education extends AbstractModel {
   @Expose()
   degree: string;
   @Expose()
-  school: string;
+  institution_name: string;
   @Expose()
-  startDate: string;
+  @Transform(transformToDateString('YYYY-MM-dd'))
+  start_date: string;
   @Expose()
-  endDate: string;
+  @Transform(transformToDateString('YYYY-MM-dd'))
+  end_date: string;
   @Expose()
   description: string;
 }

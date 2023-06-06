@@ -12,11 +12,11 @@ export class UserBase extends AbstractModel {
   @Expose()
   email: string;
   @Expose()
-  firstName: string;
+  first_name: string;
   @Expose()
-  lastName: string;
+  last_name: string;
   @Expose()
-  phone: string;
+  phone_number: string;
   @Expose()
   @Transform(transformToModel(ApiFile))
   avatar?: ApiFile;

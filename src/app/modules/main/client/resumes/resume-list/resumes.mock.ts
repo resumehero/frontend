@@ -6,84 +6,84 @@ export const resumeList: Resume[] = [
     id: getRandomIdentifier(),
     name: 'Name resume file.pdf',
     type: ResumeFileType.PDF,
-    createdAt: new Date().toISOString()
+    created: new Date().toISOString()
   },
   {
     id: getRandomIdentifier(),
     name: 'Name resume file.docx',
     type: ResumeFileType.DOC,
-    createdAt: new Date().toISOString()
+    created: new Date().toISOString()
   },
   {
     id: getRandomIdentifier(),
     name: 'Name resume file.pdf',
     type: ResumeFileType.PDF,
-    createdAt: new Date().toISOString()
+    created: new Date().toISOString()
   },
   {
     id: getRandomIdentifier(),
     name: 'Name resume file.docx',
     type: ResumeFileType.DOC,
-    createdAt: new Date().toISOString()
+    created: new Date().toISOString()
   },
   {
     id: getRandomIdentifier(),
     name: 'Name resume file.pdf',
     type: ResumeFileType.PDF,
-    createdAt: new Date().toISOString()
+    created: new Date().toISOString()
   },
   {
     id: getRandomIdentifier(),
     name: 'Name resume file.docx',
     type: ResumeFileType.DOC,
-    createdAt: new Date().toISOString()
+    created: new Date().toISOString()
   },
   {
     id: getRandomIdentifier(),
     name: 'Name resume file.pdf',
     type: ResumeFileType.PDF,
-    createdAt: new Date().toISOString()
+    created: new Date().toISOString()
   },
   {
     id: getRandomIdentifier(),
     name: 'Name resume file.docx',
     type: ResumeFileType.DOC,
-    createdAt: new Date().toISOString()
+    created: new Date().toISOString()
   },
   {
     id: getRandomIdentifier(),
     name: 'Name resume file.pdf',
     type: ResumeFileType.PDF,
-    createdAt: new Date().toISOString()
+    created: new Date().toISOString()
   },
   {
     id: getRandomIdentifier(),
     name: 'Name resume file.docx',
     type: ResumeFileType.DOC,
-    createdAt: new Date().toISOString()
+    created: new Date().toISOString()
   },
   {
     id: getRandomIdentifier(),
     name: 'Name resume file.pdf',
     type: ResumeFileType.PDF,
-    createdAt: new Date().toISOString()
+    created: new Date().toISOString()
   },
   {
     id: getRandomIdentifier(),
     name: 'Name resume file.docx',
     type: ResumeFileType.DOC,
-    createdAt: new Date().toISOString()
+    created: new Date().toISOString()
   },
   {
     id: getRandomIdentifier(),
     name: 'Name resume file.pdf',
     type: ResumeFileType.PDF,
-    createdAt: new Date().toISOString()
+    created: new Date().toISOString()
   },
   {
     id: getRandomIdentifier(),
     name: 'Name resume file.docx',
     type: ResumeFileType.DOC,
-    createdAt: new Date().toISOString()
+    created: new Date().toISOString()
   }
 ];

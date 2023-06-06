@@ -17,4 +17,6 @@ export class Resume extends AbstractModel {
   name: string;
   @Expose()
   type: ResumeFileType;
+  @Expose()
+  created: string;
 }

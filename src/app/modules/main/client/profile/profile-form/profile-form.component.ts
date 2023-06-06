@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, inject, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ToolbarHelperService } from '@services/toolbar-helper/toolbar-helper.service';
 import { profileTabLinks } from '@modules/main/client/profile/profile-tab-links';
 import { AbstractFormComponent, FormControlRecord } from '@misc/abstracts/components/abstract-form.component';
@@ -10,11 +10,22 @@ import { WorkExperience } from '@models/classes/work-experience.model';
 import { Accomplishment } from '@models/classes/accomplishment.model';
 import { Education } from '@models/classes/education.model';
 import { Certification } from '@models/classes/certification.model';
-import { Skill, SkillLevel } from '@models/classes/skill.model';
+import { Skill } from '@models/classes/skill.model';
+import { UserApiService } from '@services/api/user-api/user-api.service';
+import { plainToInstance } from 'class-transformer';
+import { IndustryApiService } from '@services/api/industry-api/industry-api.service';
+import { WorkExperienceApiService } from '@services/api/work-experience-api/work-experience-api.service';
+import { forkJoin, Observable } from 'rxjs';
+import { AccomplishmentApiService } from '@services/api/accomplishment-api/accomplishment-api.service';
+import { EducationApiService } from '@services/api/education-api/education-api.service';
+import { CertificationApiService } from '@services/api/certification-api/certification-api.service';
+import { SkillsApiService } from '@services/api/skills-api/skills-api.service';
+import { SkillLevelApiService } from '@services/api/skill-level-api/skill-level-api.service';
+import { AbstractApiService } from '@misc/abstracts/services/abstract-api.service';
+import { AbstractModel } from '@models/classes/_base.model';
 
-type UserListingFields = Pick<User, 'workExperience' | 'accomplishments' | 'education' | 'certifications' | 'skills'>;
+type UserListingFields = Pick<User, 'work_experiences' | 'accomplishments' | 'educations' | 'certifications' | 'skills'>;
 type UserListingModels = WorkExperience & Accomplishment & Education & Certification & Skill;
-type UserListingModelsUnion = WorkExperience | Accomplishment | Education | Certification | Skill;
 
 interface IFormSection {
   title: string;
@@ -28,31 +39,51 @@ interface IFormSection {
   templateUrl: './profile-form.component.html',
   styleUrls: ['./profile-form.component.scss']
 })
-export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> implements AfterViewInit {
-  @ViewChild('workTemplate') workTemplate: TemplateRef<any>;
-  @ViewChild('accomplishmentsTemplate') accomplishmentsTemplate: TemplateRef<any>;
-  @ViewChild('educationTemplate') educationTemplate: TemplateRef<any>;
-  @ViewChild('certificationsTemplate') certificationsTemplate: TemplateRef<any>;
-  @ViewChild('skillsTemplate') skillsTemplate: TemplateRef<any>;
-  industryOptions: IOption[] = [
-    { label: 'Education', value: 'education' },
-    { label: 'IT', value: 'it' }
-  ];
-  skillLevelOptions: IOption[] = Object.entries(SkillLevel).map(([label, value]) => ({ label, value }));
+export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> implements AfterViewInit, OnInit {
+  @ViewChild('workTemplate') workTemplate: TemplateRef<unknown>;
+  @ViewChild('accomplishmentsTemplate') accomplishmentsTemplate: TemplateRef<unknown>;
+  @ViewChild('educationTemplate') educationTemplate: TemplateRef<unknown>;
+  @ViewChild('certificationsTemplate') certificationsTemplate: TemplateRef<unknown>;
+  @ViewChild('skillsTemplate') skillsTemplate: TemplateRef<unknown>;
+  industryOptions: IOption[] = [];
+  skillLevelOptions: IOption[] = [];
   formSections: IFormSection[] = [];
   private _toolbar: ToolbarHelperService = inject(ToolbarHelperService);
   private _auth: AuthService = inject(AuthService);
   private _cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
+  private _userApi: UserApiService = inject(UserApiService);
+  private _industryApi: IndustryApiService = inject(IndustryApiService);
+  private _workExperienceApi: WorkExperienceApiService = inject(WorkExperienceApiService);
+  private _accomplishmentApi: AccomplishmentApiService = inject(AccomplishmentApiService);
+  private _educationApi: EducationApiService = inject(EducationApiService);
+  private _certificationApi: CertificationApiService = inject(CertificationApiService);
+  private _skillApi: SkillsApiService = inject(SkillsApiService);
+  private _skillLevelApi: SkillLevelApiService = inject(SkillLevelApiService);
   private _formArrayCreatorsMap: Map<keyof UserListingFields, (item: UserListingModels) => FormGroup> = new Map<
     keyof UserListingFields,
     (item: UserListingModels) => FormGroup
   >([
-    ['workExperience', this._getWorkExperienceGroup],
+    ['work_experiences', this._getWorkExperienceGroup],
     ['accomplishments', this._getAccomplishmentsGroup],
-    ['education', this._getEducationGroup],
+    ['educations', this._getEducationGroup],
     ['certifications', this._getCertificationsGroup],
     ['skills', this._getSkillsGroup]
   ]);
+  private _listingFieldApiMap: Map<keyof UserListingFields, AbstractApiService<AbstractModel>> = new Map<
+    keyof UserListingFields,
+    AbstractApiService<AbstractModel>
+  >([
+    ['work_experiences', this._workExperienceApi],
+    ['accomplishments', this._accomplishmentApi],
+    ['educations', this._educationApi],
+    ['certifications', this._certificationApi],
+    ['skills', this._skillApi]
+  ]);
+
+  override ngOnInit(): void {
+    super.ngOnInit();
+    this._getSelectOptionsEntities();
+  }
 
   ngAfterViewInit(): void {
     this._toolbar.data = {
@@ -72,36 +103,136 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
   }
 
   deleteRow(arrayName: keyof UserListingFields, idx: number): void {
-    this.getArray(arrayName).removeAt(idx);
+    const id: string = this.getArray(arrayName).at(idx).value.id;
+
+    this._deleteItem(this._listingFieldApiMap.get(arrayName), id, arrayName, idx);
   }
 
   asArrayItemControls(group: FormGroup): FormControlRecord<UserListingModels> {
     return group.controls;
   }
 
+  submitForm(): void {
+    if (this.formGroup.invalid) {
+      this.formGroup.markAllAsTouched();
+      return;
+    }
+
+    const formValue: User = this.formGroup.value;
+    const userData: Partial<User> = {
+      id: formValue.id,
+      first_name: formValue.first_name,
+      last_name: formValue.last_name,
+      phone_number: formValue.phone_number,
+      industry: formValue.industry
+    };
+
+    if (this.formGroup.dirty) {
+      forkJoin([
+        this._userApi.updateItem(userData),
+        ...this._getWorkExperienceRequests(),
+        ...this._getAccomplishmentRequests(),
+        ...this._getEducationRequests(),
+        ...this._getCertificationRequests(),
+        ...this._getSkillRequests()
+      ]).subscribe((): void => this._refreshProfile(true));
+    }
+  }
+
   protected override _initForm(): void {
     const me: User = this._auth.me;
 
     this.formGroup = this._fb.group<FormControlRecord<User, unknown>>({
+      id: [me.id],
       avatar: [me.avatar ?? ''],
-      firstName: [me.firstName ?? '', [Validators.required]],
-      lastName: [me.lastName ?? '', [Validators.required]],
+      first_name: [me.first_name ?? '', [Validators.required]],
+      last_name: [me.last_name ?? '', [Validators.required]],
       email: [me.email ?? '', [Validators.required]],
-      phone: [me.phone ?? '', [Validators.required]],
-      industry: [me.industry ?? []],
-      workExperience: this._getFormArray(me, 'workExperience'),
+      phone_number: [me.phone_number ?? ''],
+      industry: [me.industry ?? ''],
+      work_experiences: this._getFormArray(me, 'work_experiences'),
       accomplishments: this._getFormArray(me, 'accomplishments'),
-      education: this._getFormArray(me, 'education'),
+      educations: this._getFormArray(me, 'educations'),
       certifications: this._getFormArray(me, 'certifications'),
       skills: this._getFormArray(me, 'skills')
     });
+  }
+
+  private _getSelectOptionsEntities(): void {
+    this._industryApi.getItems().subscribe(res => {
+      this.industryOptions = res.entities.map(item => ({ label: item.name, value: item.id }));
+    });
+    this._skillLevelApi.getItems().subscribe(res => {
+      this.skillLevelOptions = res.entities.map(item => ({ label: item.name, value: item.id }));
+    });
+  }
+
+  private _deleteItem(apiService: AbstractApiService<AbstractModel>, id: string, arrayName: keyof UserListingFields, idx: number): void {
+    if (id) {
+      apiService.deleteItem(id).subscribe((): void => {
+        this.getArray(arrayName).removeAt(idx);
+        this._refreshProfile();
+      });
+    } else {
+      this.getArray(arrayName).removeAt(idx);
+    }
+  }
+
+  private _getWorkExperienceRequests(): Observable<WorkExperience>[] {
+    return this.getArrayControls('work_experiences')
+      .filter(item => item.dirty && item.valid)
+      .map(item => {
+        return item.value.id
+          ? this._workExperienceApi.updateItem(plainToInstance(WorkExperience, item.value))
+          : this._workExperienceApi.createItem(plainToInstance(WorkExperience, item.value));
+      });
+  }
+
+  private _getAccomplishmentRequests(): Observable<Accomplishment>[] {
+    return this.getArrayControls('accomplishments')
+      .filter(item => item.dirty && item.valid)
+      .map(item => {
+        return item.value.id
+          ? this._accomplishmentApi.updateItem(plainToInstance(Accomplishment, item.value))
+          : this._accomplishmentApi.createItem(plainToInstance(Accomplishment, item.value));
+      });
+  }
+
+  private _getEducationRequests(): Observable<Education>[] {
+    return this.getArrayControls('educations')
+      .filter(item => item.dirty && item.valid)
+      .map(item => {
+        return item.value.id
+          ? this._educationApi.updateItem(plainToInstance(Education, item.value))
+          : this._educationApi.createItem(plainToInstance(Education, item.value));
+      });
+  }
+
+  private _getCertificationRequests(): Observable<Certification>[] {
+    return this.getArrayControls('certifications')
+      .filter(item => item.dirty && item.valid)
+      .map(item => {
+        return item.value.id
+          ? this._certificationApi.updateItem(plainToInstance(Certification, item.value))
+          : this._certificationApi.createItem(plainToInstance(Certification, item.value));
+      });
+  }
+
+  private _getSkillRequests(): Observable<Skill>[] {
+    return this.getArrayControls('skills')
+      .filter(item => item.dirty && item.valid)
+      .map(item => {
+        return item.value.id
+          ? this._skillApi.updateItem(plainToInstance(Skill, item.value))
+          : this._skillApi.createItem(plainToInstance(Skill, item.value));
+      });
   }
 
   private _setFormSections(): void {
     this.formSections = [
       {
         title: 'Work experience',
-        listName: 'workExperience',
+        listName: 'work_experiences',
         addBtnName: 'Add another work experience',
         fieldsTemplate: this.workTemplate
       },
@@ -113,7 +244,7 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
       },
       {
         title: 'Education',
-        listName: 'education',
+        listName: 'educations',
         addBtnName: 'Add another education',
         fieldsTemplate: this.educationTemplate
       },
@@ -135,10 +266,10 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
   private _getWorkExperienceGroup(item: WorkExperience): FormGroup {
     return this._fb.group<FormControlRecord<WorkExperience, unknown[]>>({
       id: [item.id ?? ''],
-      jobTitle: [item.jobTitle ?? ''],
-      employer: [item.employer ?? ''],
-      startDate: [item.startDate ?? ''],
-      endDate: [item.endDate ?? ''],
+      job_title: [item.job_title ?? '', [Validators.required]],
+      employer: [item.employer ?? '', [Validators.required]],
+      start_date: [item.start_date ?? '', [Validators.required]],
+      end_date: [item.end_date ?? '', [Validators.required]],
       description: [item.description ?? '']
     });
   }
@@ -146,17 +277,17 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
   private _getAccomplishmentsGroup(item: Accomplishment): FormGroup {
     return this._fb.group<FormControlRecord<Accomplishment, unknown[]>>({
       id: [item.id ?? ''],
-      accomplishments: [item.accomplishments ?? '']
+      description: [item.description ?? '', [Validators.required]]
     });
   }
 
   private _getEducationGroup(item: Education): FormGroup {
     return this._fb.group<FormControlRecord<Education, unknown[]>>({
       id: [item.id ?? ''],
-      degree: [item.degree ?? ''],
-      school: [item.school ?? ''],
-      startDate: [item.startDate ?? ''],
-      endDate: [item.endDate ?? ''],
+      degree: [item.degree ?? '', [Validators.required]],
+      institution_name: [item.institution_name ?? '', [Validators.required]],
+      start_date: [item.start_date ?? '', [Validators.required]],
+      end_date: [item.end_date ?? '', [Validators.required]],
       description: [item.description ?? '']
     });
   }
@@ -164,16 +295,16 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
   private _getCertificationsGroup(item: Certification): FormGroup {
     return this._fb.group<FormControlRecord<Certification, unknown[]>>({
       id: [item.id ?? ''],
-      certification: [item.certification ?? ''],
-      date: [item.date ?? '']
+      name: [item.name ?? '', [Validators.required]],
+      date: [item.date ?? '', [Validators.required]]
     });
   }
 
   private _getSkillsGroup(item: Skill): FormGroup {
     return this._fb.group<FormControlRecord<Skill, unknown[]>>({
       id: [item.id ?? ''],
-      name: [item.name ?? ''],
-      level: [item.level ?? '']
+      name: [item.name ?? '', [Validators.required]],
+      level: [item.level ?? '', [Validators.required]]
     });
   }
 
@@ -184,5 +315,9 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
   private _getFormArray(user: User, field: keyof UserListingFields): FormArray {
     const array: UserListingModels[] = (user[field]?.length ? user[field] : [{}]) as UserListingModels[];
     return new FormArray(array.map((entity: UserListingModels): FormGroup => this._getGroupByName(field, entity)));
+  }
+
+  private _refreshProfile(isInitForm?: boolean): void {
+    this._auth.getMe().subscribe(() => isInitForm && this._initForm());
   }
 }
