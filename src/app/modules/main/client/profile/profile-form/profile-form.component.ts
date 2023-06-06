@@ -15,7 +15,7 @@ import { UserApiService } from '@services/api/user-api/user-api.service';
 import { plainToInstance } from 'class-transformer';
 import { IndustryApiService } from '@services/api/industry-api/industry-api.service';
 import { WorkExperienceApiService } from '@services/api/work-experience-api/work-experience-api.service';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
 import { AccomplishmentApiService } from '@services/api/accomplishment-api/accomplishment-api.service';
 import { EducationApiService } from '@services/api/education-api/education-api.service';
 import { CertificationApiService } from '@services/api/certification-api/certification-api.service';
@@ -118,18 +118,18 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
       return;
     }
 
-    const formValue: User = this.formGroup.value;
+    const { id, first_name, last_name, phone_number, industry }: User = this.formGroup.value;
     const userData: Partial<User> = {
-      id: formValue.id,
-      first_name: formValue.first_name,
-      last_name: formValue.last_name,
-      phone_number: formValue.phone_number,
-      industry: formValue.industry
+      id,
+      first_name,
+      last_name,
+      phone_number
     };
 
     if (this.formGroup.dirty) {
       forkJoin([
         this._userApi.updateItem(userData),
+        this.form.industry.dirty ? this._industryApi.createItem({ industry }) : of(null),
         ...this._getWorkExperienceRequests(),
         ...this._getAccomplishmentRequests(),
         ...this._getEducationRequests(),
@@ -149,7 +149,7 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
       last_name: [me.last_name ?? '', [Validators.required]],
       email: [me.email ?? '', [Validators.required]],
       phone_number: [me.phone_number ?? ''],
-      industry: [me.industry ?? ''],
+      industry: [me.industry?.id ?? ''],
       work_experiences: this._getFormArray(me, 'work_experiences'),
       accomplishments: this._getFormArray(me, 'accomplishments'),
       educations: this._getFormArray(me, 'educations'),
