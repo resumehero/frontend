@@ -1,8 +1,7 @@
 import { Exclude, Expose, Transform, TransformFnParams } from 'class-transformer';
 import { UserRole } from '@models/enums/user-role.enum';
 import { AbstractModel } from '@models/classes/_base.model';
-import { ApiFile } from '@models/classes/file.model';
-import { transformToModel } from '@misc/helpers/model-conversion/transform-helpers/transform-to-model.function';
+import { Photo } from '@models/classes/photo.model';
 
 @Exclude()
 export class UserBase extends AbstractModel {
@@ -18,8 +17,7 @@ export class UserBase extends AbstractModel {
   @Expose()
   phone_number: string;
   @Expose()
-  @Transform(transformToModel(ApiFile))
-  avatar?: ApiFile;
+  photo?: Photo;
   @Expose({ name: 'emailVerified' })
   isEmailVerified: boolean;
   @Expose()

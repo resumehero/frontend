@@ -16,7 +16,7 @@ export class FileUploaderComponent extends AbstractFileUploaderComponent impleme
   @Input() previewHeight: number = 160;
   @Input() previewWidth: number = 225;
   @Input() actionsXPosition: 'start' | 'end' = 'end';
-  @Input() actionsYPosition: 'start' | 'end' = 'end';
+  @Input() actionsYPosition: 'start' | 'end' = 'start';
   @Input() actionsColor: ThemePalette = 'primary';
 
   get actionsPositionClasses(): string[] {

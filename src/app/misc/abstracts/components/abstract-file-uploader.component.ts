@@ -22,7 +22,7 @@ export abstract class AbstractFileUploaderComponent extends AbstractFormFieldCom
   @Output() fileDragleave: EventEmitter<DragEvent> = new EventEmitter<DragEvent>();
   @Input() override control: FormControl = new FormControl();
   @Input() fileType: FileType[] = [FileType.any];
-  @Input() multiple: boolean = true;
+  @Input() multiple: boolean;
   @Input() maxCountFile: number = 10;
   @Input() maxSizeFile: number = 5;
   filesOnLoading: Set<string> = new Set<string>();
@@ -113,6 +113,7 @@ export abstract class AbstractFileUploaderComponent extends AbstractFormFieldCom
     this.control.setValue(
       this.control.value?.length ? this.control.value.filter((file: File, index: number): boolean => idx !== index) : null
     );
+    this.control.markAsDirty();
     if (this.fileInput?.nativeElement) {
       this.fileInput.nativeElement.value = this.control.value?.length
         ? this.control.value.filter((file: File, index: number): boolean => idx !== index)
@@ -133,7 +134,7 @@ export abstract class AbstractFileUploaderComponent extends AbstractFormFieldCom
 
   getNativeFileUrl(file: ApiFile | File): string {
     if (file instanceof ApiFile) {
-      return this._sanitizer.bypassSecurityTrustResourceUrl(file.uri) as string;
+      return this._sanitizer.bypassSecurityTrustResourceUrl(file.photo) as string;
     }
 
     return this._sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(file)) as string;
