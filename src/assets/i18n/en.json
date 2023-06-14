@@ -39,7 +39,7 @@
     }
   },
   "MESSAGE": {
-    "EMPTY_LIST": "No search results"
+    "EMPTY_LIST": "No results"
   },
   "CUSTOM_NOTIFICATIONS": {
     "HELLO": "Hello!",

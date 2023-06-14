@@ -52,7 +52,6 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
   formSections: IFormSection[] = [];
   private _toolbar: ToolbarHelperService = inject(ToolbarHelperService);
   private _auth: AuthService = inject(AuthService);
-  private _cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
   private _userApi: UserApiService = inject(UserApiService);
   private _industryApi: IndustryApiService = inject(IndustryApiService);
   private _workExperienceApi: WorkExperienceApiService = inject(WorkExperienceApiService);

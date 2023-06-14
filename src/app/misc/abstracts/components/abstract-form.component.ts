@@ -1,5 +1,5 @@
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { InputType } from '@models/enums/input-type.enum';
 import { IFormControlItem } from '@models/interfaces/forms/form-control-item.interface';
@@ -12,10 +12,10 @@ export type FormControlRecord<KEY, VAL = AbstractControl> = Partial<Record<keyof
 })
 export abstract class AbstractFormComponent<F = any> implements OnInit, OnDestroy {
   formGroup: FormGroup;
-  readonly FormControlItemType: typeof FormControlItemType = FormControlItemType;
   readonly InputType: typeof InputType = InputType;
   protected _fb: FormBuilder = inject(FormBuilder);
   protected readonly _DESTROYED$: Subject<void> = new Subject();
+  protected _cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   get form(): FormControlRecord<F> | null {
     return this.formGroup?.controls as FormControlRecord<F>;

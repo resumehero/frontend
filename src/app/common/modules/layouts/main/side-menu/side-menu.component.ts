@@ -10,6 +10,8 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { User } from '@models/classes/user/user.model';
 import { ModalService } from '@shared/modal/modal.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ResumeService } from '@services/resume/resume.service';
+import { CreateResumeComponent } from '@modules/main/client/resumes/create-resume/create-resume.component';
 
 @Component({
   selector: 'side-menu',
@@ -28,6 +30,8 @@ export class SideMenuComponent implements OnInit {
   private _modal: ModalService = inject(ModalService);
   private _auth: AuthService = inject(AuthService);
   private _router: Router = inject(Router);
+  private _resumeService: ResumeService = inject(ResumeService);
+  private _modalService: ModalService = inject(ModalService);
 
   get navItems(): INavLink[] {
     return navItems;
@@ -58,6 +62,16 @@ export class SideMenuComponent implements OnInit {
   toggleSize(event: MouseEvent): void {
     event.stopPropagation();
     this.isCollapsed = !this.isCollapsed;
+  }
+
+  openResumeModal(): Observable<any> {
+    return this._modalService.open(
+      {
+        component: CreateResumeComponent,
+        actions: [{ value: true, name: 'Submit', type: 'submit', color: 'primary', width: 'full', style: 'flat' }]
+      },
+      { width: '73rem', maxHeight: '96vh', autoFocus: 'dialog' }
+    );
   }
 
   logout(): void {

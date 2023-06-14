@@ -1,0 +1,51 @@
+<section class="resume">
+  <form (ngSubmit)="onSubmit()" *ngIf="formGroup" @fadeInOut [formGroup]="formGroup" class="resume__form">
+    <h1 class="resume__title mat-headline-6">Create resume</h1>
+    <div class="resume__row">
+      <label class="resume__label">Choose resume type</label>
+      <mat-radio-group [formControl]="typeControl" class="custom-radio">
+        <mat-radio-button (click)="typeControl.setValue(ResumeType.Default)" [value]="ResumeType.Default" color="primary">
+          <h2 class="custom-radio__title">Default</h2>
+          <p class="custom-radio__sub-title">Get a ready-to-use resume file with your profile information</p>
+        </mat-radio-button>
+        <mat-radio-button (click)="typeControl.setValue(ResumeType.ForVacancy)" [value]="ResumeType.ForVacancy" color="primary">
+          <h2 class="custom-radio__title">For special vacancy</h2>
+          <p class="custom-radio__sub-title">Enter the text of the vacancy and get a unique resume</p>
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div class="resume__row">
+      <label class="resume__label">Choose file type</label>
+      <mat-radio-group [formControl]="fileTypeControl" class="custom-radio">
+        <mat-radio-button (click)="fileTypeControl.setValue(ResumeFileType.PDF)" [value]="ResumeFileType.PDF" color="primary">
+          <h2 class="custom-radio__title">Pdf</h2>
+        </mat-radio-button>
+        <mat-radio-button (click)="fileTypeControl.setValue(ResumeFileType.DOC)" [value]="ResumeFileType.DOC" color="primary">
+          <h2 class="custom-radio__title">Docx</h2>
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div class="resume__row">
+      <label class="resume__label">Choose resume template</label>
+      <base-select
+        [control]="form.resume_template_id"
+        [options]="templatesOptions"
+        class="resume__form-field"
+        placeholder="Resume template"
+      ></base-select>
+    </div>
+
+    <div *ngIf="typeControl.value === ResumeType.ForVacancy" @fadeInOut class="resume__row">
+      <label class="resume__label">Enter the vacancy text</label>
+      <base-textarea
+        [control]="form.vacancy_text"
+        [maxRows]="6"
+        [minRows]="4"
+        class="resume__text"
+        placeholder="Start typing..."
+      ></base-textarea>
+    </div>
+  </form>
+</section>

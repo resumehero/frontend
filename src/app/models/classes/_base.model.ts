@@ -4,6 +4,8 @@ import { Exclude, Expose } from 'class-transformer';
 export abstract class AbstractModel {
   @Expose()
   id: string;
+  @Expose()
+  created?: string;
 
   [Symbol.toPrimitive]?(hint: 'number' | 'string' | 'default'): string | number | void {
     switch (hint) {

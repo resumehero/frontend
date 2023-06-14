@@ -1,25 +1,49 @@
-<div mat-dialog-actions class="modal-actions" *ngIf="actions">
+<div *ngIf="actions" class="modal-actions" mat-dialog-actions>
   <ng-container *ngFor="let action of actions">
     <ng-container [ngSwitch]="action.type">
       <ng-container *ngSwitchCase="'submit'">
         <ng-container [ngSwitch]="action.style">
           <ng-container *ngSwitchCase="'stroked'">
-            <button mat-stroked-button class="modal-actions__button" [color]="action.color" (click)="submitted.emit()">
+            <button
+              (click)="submitted.emit()"
+              [class.full-width]="action.width === 'full'"
+              [color]="action.color"
+              class="modal-actions__button"
+              mat-stroked-button
+            >
               {{ action.name | translate }}
             </button>
           </ng-container>
           <ng-container *ngSwitchCase="'flat'">
-            <button mat-flat-button class="modal-actions__button" [color]="action.color" (click)="submitted.emit()">
+            <button
+              (click)="submitted.emit()"
+              [class.full-width]="action.width === 'full'"
+              [color]="action.color"
+              class="modal-actions__button"
+              mat-flat-button
+            >
               {{ action.name | translate }}
             </button>
           </ng-container>
           <ng-container *ngSwitchCase="'raised'">
-            <button mat-raised-button class="modal-actions__button" [color]="action.color" (click)="submitted.emit()">
+            <button
+              (click)="submitted.emit()"
+              [class.full-width]="action.width === 'full'"
+              [color]="action.color"
+              class="modal-actions__button"
+              mat-raised-button
+            >
               {{ action.name | translate }}
             </button>
           </ng-container>
           <ng-container *ngSwitchDefault>
-            <button mat-button class="modal-actions__button" [color]="action.color" (click)="submitted.emit()">
+            <button
+              (click)="submitted.emit()"
+              [class.full-width]="action.width === 'full'"
+              [color]="action.color"
+              class="modal-actions__button"
+              mat-button
+            >
               {{ action.name | translate }}
             </button>
           </ng-container>
@@ -29,27 +53,49 @@
         <ng-container [ngSwitch]="action.style">
           <ng-container *ngSwitchCase="'stroked'">
             <button
-              mat-stroked-button
-              type="button"
-              class="modal-actions__button"
+              [class.full-width]="action.width === 'full'"
               [color]="action.color"
               [mat-dialog-close]="action?.value"
+              class="modal-actions__button"
+              mat-stroked-button
+              type="button"
             >
               {{ action.name | translate }}
             </button>
           </ng-container>
           <ng-container *ngSwitchCase="'flat'">
-            <button mat-flat-button type="button" class="modal-actions__button" [color]="action.color" [mat-dialog-close]="action?.value">
+            <button
+              [class.full-width]="action.width === 'full'"
+              [color]="action.color"
+              [mat-dialog-close]="action?.value"
+              class="modal-actions__button"
+              mat-flat-button
+              type="button"
+            >
               {{ action.name | translate }}
             </button>
           </ng-container>
           <ng-container *ngSwitchCase="'raised'">
-            <button mat-raised-button type="button" class="modal-actions__button" [color]="action.color" [mat-dialog-close]="action?.value">
+            <button
+              [class.full-width]="action.width === 'full'"
+              [color]="action.color"
+              [mat-dialog-close]="action?.value"
+              class="modal-actions__button"
+              mat-raised-button
+              type="button"
+            >
               {{ action.name | translate }}
             </button>
           </ng-container>
           <ng-container *ngSwitchDefault>
-            <button mat-button type="button" class="modal-actions__button" [color]="action.color" [mat-dialog-close]="action?.value">
+            <button
+              [class.full-width]="action.width === 'full'"
+              mat-button
+              type="button"
+              class="modal-actions__button"
+              [color]="action.color"
+              [mat-dialog-close]="action?.value"
+            >
               {{ action.name | translate }}
             </button>
           </ng-container>

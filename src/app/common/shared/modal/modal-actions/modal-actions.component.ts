@@ -5,6 +5,7 @@ export interface IModalAction extends Omit<IAction<boolean>, 'value'> {
   style?: 'raised' | 'stroked' | 'flat';
   type: 'submit' | 'close';
   value?: boolean;
+  width?: 'default' | 'full';
 }
 
 @Component({

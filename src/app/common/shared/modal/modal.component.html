@@ -1,13 +1,14 @@
 <div class="modal">
-  <header *ngIf="icon" class="modal__header">
-    <mat-icon [svgIcon]="icon"></mat-icon>
-  </header>
+  <button [mat-dialog-close]="false" class="modal__close" mat-icon-button type="button">
+    <mat-icon [svgIcon]="'close'"></mat-icon>
+  </button>
+
   <div #modalBody class="modal__body">
-    <h3 mat-dialog-title class="modal__title" *ngIf="data.title">{{ data.title | translate }}</h3>
-    <p class="modal__text" *ngIf="data.message" [innerHTML]="data.message | translate"></p>
-    <div class="modal__template" *ngIf="data.template">
+    <h3 *ngIf="data.title" class="modal__title" mat-dialog-title>{{ data.title | translate }}</h3>
+    <p *ngIf="data.message" [innerHTML]="data.message | translate" class="modal__text"></p>
+    <div *ngIf="data.template" class="modal__template">
       <ng-container *ngTemplateOutlet="data.template ?? null; context: context"></ng-container>
     </div>
   </div>
-  <modal-actions class="modal__actions" *ngIf="data.actions" [actions]="data.actions" (submitted)="onSubmit()"></modal-actions>
+  <modal-actions (submitted)="onSubmit()" *ngIf="data.actions" [actions]="data.actions" class="modal__actions"></modal-actions>
 </div>

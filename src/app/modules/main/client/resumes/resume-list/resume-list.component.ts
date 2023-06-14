@@ -4,8 +4,8 @@ import { List } from '@models/classes/_list.model';
 import { Resume, ResumeFileIconMap } from '@models/classes/resume.model';
 import { Params } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { resumeList } from '@modules/main/client/resumes/resume-list/resumes.mock';
 import { ToolbarHelperService } from '@services/toolbar-helper/toolbar-helper.service';
+import { ResumeApiService } from '@services/api/resume-api/resume-api.service';
 
 @Component({
   selector: 'resume-list',
@@ -15,9 +15,10 @@ import { ToolbarHelperService } from '@services/toolbar-helper/toolbar-helper.se
 export class ResumeListComponent extends AbstractListingApiComponent<Resume> implements AfterViewInit {
   list: List<Resume>;
   private _toolbar: ToolbarHelperService = inject(ToolbarHelperService);
+  private _resumeApi: ResumeApiService = inject(ResumeApiService);
 
   getIconName(item: Resume): string {
-    return ResumeFileIconMap.get(item.type);
+    return ResumeFileIconMap.get(item.resume_file?.file_type);
   }
 
   downloadItem(item: Resume): void {
@@ -25,7 +26,7 @@ export class ResumeListComponent extends AbstractListingApiComponent<Resume> imp
   }
 
   deleteItem(item: Resume): void {
-    // implement
+    this._resumeApi.deleteItem(item.id).subscribe((): void => this._updateList(true));
   }
 
   ngAfterViewInit(): void {
@@ -35,6 +36,6 @@ export class ResumeListComponent extends AbstractListingApiComponent<Resume> imp
   }
 
   protected override _getItems(params: Params): Observable<List<Resume>> {
-    return of({ entities: resumeList, total: resumeList.length });
+    return this._resumeApi.getItems(params);
   }
 }

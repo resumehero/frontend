@@ -2,9 +2,14 @@
   justify-content: center;
   gap: 1.2rem;
   padding: 0;
+  width: 100%;
 
   &__button {
     padding: 0 3rem;
+
+    &.full-width {
+      width: 100%;
+    }
 
     &:only-child {
       flex-grow: 1;

@@ -17,7 +17,7 @@
 
     <mat-divider class="side-menu__divider"></mat-divider>
 
-    <button class="side-menu__add-btn" mat-flat-button [color]="'primary'">
+    <button (click)="openResumeModal()" class="side-menu__add-btn" mat-flat-button [color]="'primary'">
       <mat-icon [svgIcon]="'plus-small'"></mat-icon>
       Create resume
     </button>

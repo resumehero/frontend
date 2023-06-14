@@ -1,11 +1,12 @@
 <section class="resume-list">
   <paginated-list
+    [columnWidth]="'49.5rem'"
     [emptyMessage]="'MESSAGE.EMPTY_LIST' | translate"
     [gridGap]="'2rem'"
     [itemTemplate]="listItem"
     [list]="list"
-    [columnWidth]="'49.5rem'"
     [queryParams]="qp"
+    [shouldHidePagination]="true"
   ></paginated-list>
 </section>
 
@@ -14,13 +15,13 @@
     <mat-icon [svgIcon]="getIconName(item)" class="resume__icon"></mat-icon>
     <div class="resume__info">
       <h5 class="resume__title">{{ item.name }}</h5>
-      <p class="resume__date">{{ item.createdAt | date : 'dd MMM, yyyy' }}</p>
+      <p class="resume__date">{{ item.created | date : 'dd MMM, yyyy' }}</p>
     </div>
     <div class="resume__controls">
-      <button (click)="downloadItem(item)" [color]="'primary'" mat-icon-button>
+      <button (click)="downloadItem(item)" [color]="'primary'" mat-icon-button matTooltip="Download">
         <mat-icon [svgIcon]="'cloud-download'"></mat-icon>
       </button>
-      <button (click)="deleteItem(item)" [color]="'warn'" mat-icon-button>
+      <button (click)="deleteItem(item)" [color]="'warn'" mat-icon-button matTooltip="Delete">
         <mat-icon [svgIcon]="'trash'"></mat-icon>
       </button>
     </div>

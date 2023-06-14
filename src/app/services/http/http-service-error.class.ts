@@ -11,7 +11,7 @@ export class HttpServiceError extends HttpErrorResponse {
   }
 
   private get _isFormError(): boolean {
-    return Boolean(this.error?.violations);
+    return typeof this.error === 'object' && this.error !== null;
   }
 
   constructor(e: HttpErrorResponse) {
@@ -36,16 +36,16 @@ export class HttpServiceError extends HttpErrorResponse {
 
     message = message || 'Something went wrong';
 
-    return { key: key ?? message.replace(/\s/gm, '_').replace(/\W/gm, ''), message };
+    return { key: null, message };
   }
 
   private _getFormFieldsErrorDescriptions(error: HttpErrorResponse): IErrorDescription[] {
-    const { violations: mainErrors }: { violations: { code: string; message: string }[] } = error.error;
+    const mainErrors: string[] = Object.keys(error.error);
     const result: IErrorDescription[] = [];
 
     if (mainErrors) {
-      mainErrors.forEach((obtainedError: { code: string; message: string }): void => {
-        result.push({ key: obtainedError.code, message: obtainedError.message });
+      mainErrors.forEach((field: string): void => {
+        result.push({ key: field, message: error.error[field] });
       });
     }
 

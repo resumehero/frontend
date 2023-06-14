@@ -54,7 +54,7 @@ export abstract class AbstractListingApiComponent<T = any> extends AbstractCrudH
     this._queryParams.paginate(1, this._queryParams.params[QueryParamsService.BASE_KEYS.PER_PAGE]);
   }
 
-  protected _updateList(shouldClearPagination: boolean): void {
+  protected _updateList(shouldClearPagination?: boolean): void {
     if (shouldClearPagination) {
       this._queryParams.paginate(1, this._queryParams.params[QueryParamsService.BASE_KEYS.PER_PAGE]);
     } else {
