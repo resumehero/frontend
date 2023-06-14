@@ -2,9 +2,11 @@ import { AfterViewInit, Component, inject } from '@angular/core';
 import { ToolbarHelperService } from '@services/toolbar-helper/toolbar-helper.service';
 import { profileTabLinks } from '@modules/main/client/profile/profile-tab-links';
 import { AbstractFormComponent } from '@misc/abstracts/components/abstract-form.component';
-import { Validators } from '@angular/forms';
+import { NgForm, Validators } from '@angular/forms';
 import { VALIDATORS_SET } from '@misc/constants/validators-set.constant';
 import { CustomValidators } from '@misc/custom-validators';
+import { UserApiService } from '@services/api/user-api/user-api.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'change-password',
@@ -13,6 +15,8 @@ import { CustomValidators } from '@misc/custom-validators';
 })
 export class ChangePasswordComponent extends AbstractFormComponent implements AfterViewInit {
   private _toolbar: ToolbarHelperService = inject(ToolbarHelperService);
+  private _userApi: UserApiService = inject(UserApiService);
+  private _notification: ToastrService = inject(ToastrService);
 
   ngAfterViewInit(): void {
     this._toolbar.data = {
@@ -21,20 +25,28 @@ export class ChangePasswordComponent extends AbstractFormComponent implements Af
     };
   }
 
-  submit(): void {
+  submit(formRef: NgForm): void {
     if (this.formGroup.invalid) {
       return;
     }
+
+    const { current_password, new_password } = this.formGroup.value;
+
+    this._userApi.setPassword(current_password, new_password).subscribe(() => {
+      this.formGroup.reset();
+      formRef.resetForm();
+      this._notification.success('Password has been successfully changed.');
+    });
   }
 
   protected override _initForm(): void {
     this.formGroup = this._fb.group(
       {
-        currentPassword: ['', [Validators.required]],
-        password: ['', [Validators.required, VALIDATORS_SET.PASSWORD]],
+        current_password: ['', [Validators.required]],
+        new_password: ['', [Validators.required, VALIDATORS_SET.PASSWORD]],
         repeatPassword: ['', [Validators.required, VALIDATORS_SET.PASSWORD]]
       },
-      { validators: [CustomValidators.mustMatch('password', 'repeatPassword')] }
+      { validators: [CustomValidators.mustMatch('new_password', 'repeatPassword')] }
     );
   }
 }

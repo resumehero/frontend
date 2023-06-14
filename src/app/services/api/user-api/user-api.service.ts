@@ -33,4 +33,8 @@ export class UserApiService extends AbstractApiService<User> {
   confirmAccount(uid: string, token: string, services?: IServicesConfig): Observable<any> {
     return this._http.post(`${this.url}/activation`, { uid, token }, {}, services);
   }
+
+  setPassword(current_password: string, new_password: string, services?: IServicesConfig): Observable<any> {
+    return this._http.post(`${this.url}/set_password`, { current_password, new_password }, {}, services);
+  }
 }
