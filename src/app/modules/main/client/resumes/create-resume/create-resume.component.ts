@@ -8,6 +8,8 @@ import { fadeInOut } from '@base/animations/appearance.animations';
 import { ResumeApiService } from '@services/api/resume-api/resume-api.service';
 import { ResumeTemplateApiService } from '@services/api/resume-template-api/resume-template-api.service';
 import { IOption } from '@models/interfaces/forms/option.interface';
+import { tap } from 'rxjs/operators';
+import { ResumeService } from '@services/resume/resume.service';
 
 @Component({
   selector: 'create-resume',
@@ -20,6 +22,7 @@ export class CreateResumeComponent extends AbstractFormComponent<ResumeCreate> i
   ResumeType: typeof ResumeType = ResumeType;
   ResumeFileType: typeof ResumeFileType = ResumeFileType;
   templatesOptions: IOption[] = [];
+  private _resumeService: ResumeService = inject(ResumeService);
   private _resumeApi: ResumeApiService = inject(ResumeApiService);
   private _resumeTemplateApi: ResumeTemplateApiService = inject(ResumeTemplateApiService);
 
@@ -47,9 +50,15 @@ export class CreateResumeComponent extends AbstractFormComponent<ResumeCreate> i
       return this.formGroup.markAsTouched();
     }
     const body: ResumeCreate = this.formGroup.value;
-    console.log(body);
-    this._resumeApi.generateResume(body).subscribe();
-    // this.context.dialog.close(body);
+
+    this._resumeApi
+      .generateResume(body)
+      .pipe(
+        tap(() => this._resumeApi.clearEntireCache()),
+        tap(() => this._resumeService.RESUME_CREATED$.next()),
+        tap(() => this.context.dialog.close(body))
+      )
+      .subscribe();
   }
 
   private _handleResumeTypeChange(): void {

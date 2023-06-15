@@ -8,8 +8,9 @@ import { toModel } from '@misc/rxjs-operators/to-model.operator';
 import { CustomHTTPParamsEncoder } from '@misc/custom-http-params-encoder';
 import { HttpParams } from '@angular/common/http';
 import { List } from '@models/classes/_list.model';
-import { APP_CONFIG, IAppConfig } from '@misc/constants/app-config.constant';
 import { AbstractModel } from '@models/classes/_base.model';
+import { AbstractCacheService } from '@services/cache/abstract-cache.service';
+import { runInAnyCase } from '@misc/rxjs-operators/run-in-any-case.operator';
 
 export type transition = 'cancel' | 'reject' | 'accept';
 
@@ -23,7 +24,7 @@ export interface ITransitData {
 @Injectable({
   providedIn: 'root'
 })
-export abstract class AbstractApiService<T extends AbstractModel> {
+export abstract class AbstractApiService<T extends AbstractModel> extends AbstractCacheService {
   protected _http: HttpService = inject(HttpService);
   protected _URLParams: string[] = [];
   protected abstract readonly _MODEL: ClassConstructor<T>;
@@ -35,7 +36,11 @@ export abstract class AbstractApiService<T extends AbstractModel> {
 
   getItems(params?: Params, servicesConfig?: IServicesConfig): Observable<List<T>> {
     const httpParams: HttpParams = new HttpParams({ fromObject: params, encoder: new CustomHTTPParamsEncoder() });
-    return this._http.get(this.url, { params: httpParams }, servicesConfig).pipe(toModelsList(this._MODEL));
+    return this.cacheRequest(
+      [this.url, params],
+      this._http.get(this.url, { params: httpParams }, servicesConfig).pipe(toModelsList(this._MODEL)),
+      { ignoreCache: servicesConfig?.skipCaching }
+    ).pipe(runInAnyCase(() => this._http.endLoader(servicesConfig)));
   }
 
   getItem(id?: string, params?: Params, servicesConfig?: IServicesConfig): Observable<T> {

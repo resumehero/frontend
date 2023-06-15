@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { LoaderService, LoaderType } from '@services/loader/loader.service';
 import { HttpServiceError, IErrorDescription } from '@services/http/http-service-error.class';
-import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { IHttpRequestOptions } from '@models/interfaces/http-request-options.interface';
 import { APP_CONFIG, IAppConfig } from '@misc/constants/app-config.constant';
@@ -15,6 +14,7 @@ export interface IServicesConfig {
   loaderType?: LoaderType;
   skipLoaderStart?: boolean;
   skipLoaderEnd?: boolean;
+  skipCaching?: boolean;
 }
 
 @Injectable({
@@ -23,7 +23,6 @@ export interface IServicesConfig {
 export class HttpService extends HttpClient {
   private _notification: ToastrService = inject(ToastrService);
   private _loader: LoaderService = inject(LoaderService);
-  private _translate: TranslateService = inject(TranslateService);
   private _config: IAppConfig = inject<IAppConfig>(APP_CONFIG);
   private _apiVersion: string = 'v1';
 
@@ -32,7 +31,7 @@ export class HttpService extends HttpClient {
   }
 
   override get(url: string, options?: IHttpRequestOptions, services?: IServicesConfig | undefined): Observable<any> {
-    this._startLoader(services);
+    this.startLoader(services);
 
     return super
       .get(this.apiUrl + url, options as IHttpRequestOptions)
@@ -44,7 +43,7 @@ export class HttpService extends HttpClient {
   }
 
   override post(url: string, body: any | null, options?: IHttpRequestOptions, services?: IServicesConfig | undefined): Observable<any> {
-    this._startLoader(services);
+    this.startLoader(services);
 
     return super
       .post(this.apiUrl + url, body, options)
@@ -56,7 +55,7 @@ export class HttpService extends HttpClient {
   }
 
   override patch(url: string, body: any | null, options?: IHttpRequestOptions, services?: IServicesConfig | undefined): Observable<any> {
-    this._startLoader(services);
+    this.startLoader(services);
     return super
       .patch(this.apiUrl + url, body, options)
       .pipe(
@@ -67,7 +66,7 @@ export class HttpService extends HttpClient {
   }
 
   override delete(url: string, options?: IHttpRequestOptions, services?: IServicesConfig | undefined): Observable<any> {
-    this._startLoader(services);
+    this.startLoader(services);
 
     return super
       .delete(this.apiUrl + url, options)
@@ -79,7 +78,7 @@ export class HttpService extends HttpClient {
   }
 
   override put(url: string, body: any | null, options?: IHttpRequestOptions, services?: IServicesConfig | undefined): Observable<any> {
-    this._startLoader(services);
+    this.startLoader(services);
 
     return super
       .put(this.apiUrl + url, body, options)
@@ -88,6 +87,18 @@ export class HttpService extends HttpClient {
         catchError(this._onError.bind(this, services)),
         finalize(this._onEveryCase.bind(this, services))
       );
+  }
+
+  startLoader(config: IServicesConfig | undefined): void {
+    if (!config || (config && !config.skipLoaderStart)) {
+      this._loader.on(config?.loaderType ?? 'spinner');
+    }
+  }
+
+  endLoader(config: IServicesConfig | undefined): void {
+    if (!config || (config && !config.skipLoaderEnd)) {
+      this._loader.off(config?.loaderType ?? 'spinner');
+    }
   }
 
   private _onSuccess(config: IServicesConfig | undefined): void {
@@ -112,18 +123,6 @@ export class HttpService extends HttpClient {
   }
 
   private _onEveryCase(config: IServicesConfig | undefined): void {
-    this._endLoader(config);
-  }
-
-  private _startLoader(config: IServicesConfig | undefined): void {
-    if (!config || (config && !config.skipLoaderStart)) {
-      this._loader.on(config?.loaderType ?? 'spinner');
-    }
-  }
-
-  private _endLoader(config: IServicesConfig | undefined): void {
-    if (!config || (config && !config.skipLoaderEnd)) {
-      this._loader.off(config?.loaderType ?? 'spinner');
-    }
+    this.endLoader(config);
   }
 }
