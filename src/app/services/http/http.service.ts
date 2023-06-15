@@ -115,7 +115,7 @@ export class HttpService extends HttpClient {
       !(typeof config.skipErrorNotification === 'boolean' ? config.skipErrorNotification : config.skipErrorNotification?.(customError))
     ) {
       customError.descriptions.forEach(({ key, message }: IErrorDescription): void => {
-        this._notification.error(message, key);
+        this._notification.error(message);
       });
     }
 

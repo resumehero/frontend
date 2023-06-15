@@ -13,6 +13,7 @@ $color-bg: $color-grey-light;
 $color-black: #171618;
 $color-grey: #484b5b;
 $color-white: #fff;
+$color-green: #06bc65;
 $color-input-bg: linear-gradient(0deg, rgba(255, 255, 255, 40%), rgba(255, 255, 255, 40%)), $color-grey-light;
 
 :root {
@@ -28,4 +29,5 @@ $color-input-bg: linear-gradient(0deg, rgba(255, 255, 255, 40%), rgba(255, 255, 
   --color-white: #{$color-white};
   --color-bg: #{$color-bg};
   --color-input-bg: #{$color-input-bg};
+  --color-green: #{$color-green};
 }

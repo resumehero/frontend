@@ -8,9 +8,11 @@
   align-items: center;
   justify-content: space-between;
 
-  &__heading,
   &__message {
     margin-bottom: 0;
+    font-weight: var(--fw-medium);
+    font-size: 1.6rem;
+    line-height: 160%;
   }
 
   &__content {

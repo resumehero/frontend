@@ -1,0 +1,35 @@
+@import "variables/modules/colors";
+
+@mixin baseStyles($color) {
+  box-shadow: 0 2.4rem 4.8rem -1.6rem rgba(56, 56, 138, 15%);
+  border-radius: 0.5rem;
+  background-color: var(--color-white);
+  color: var(--color-black);
+  border-left: 3px solid $color;
+
+  .toast-progress {
+    background-color: rgb($color, 0.9);
+  }
+}
+
+.toast-container {
+  .ngx-toastr {
+    min-width: 40rem;
+    min-height: 6.6rem;
+
+    &.toast-success {
+      @include baseStyles($color-green);
+      background-image: url("/assets/img/svg/check-circle.svg");
+    }
+
+    &.toast-warning {
+      @include baseStyles($color-orange);
+      background-image: url("/assets/img/svg/exclamation-circle.svg");
+    }
+
+    &.toast-error {
+      @include baseStyles($color-red);
+      background-image: url("/assets/img/svg/cross-circle.svg");
+    }
+  }
+}

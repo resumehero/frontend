@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ToolbarHelperService } from '@services/toolbar-helper/toolbar-helper.service';
 import { profileTabLinks } from '@modules/main/client/profile/profile-tab-links';
 import { AbstractFormComponent, FormControlRecord } from '@misc/abstracts/components/abstract-form.component';
@@ -24,6 +24,7 @@ import { SkillLevelApiService } from '@services/api/skill-level-api/skill-level-
 import { AbstractApiService } from '@misc/abstracts/services/abstract-api.service';
 import { AbstractModel } from '@models/classes/_base.model';
 import { ApiFile } from '@models/classes/file.model';
+import { ToastrService } from 'ngx-toastr';
 
 type UserListingFields = Pick<User, 'work_experiences' | 'accomplishments' | 'educations' | 'certifications' | 'skills'>;
 type UserListingModels = WorkExperience & Accomplishment & Education & Certification & Skill;
@@ -59,6 +60,7 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
   private _certificationApi: CertificationApiService = inject(CertificationApiService);
   private _skillApi: SkillsApiService = inject(SkillsApiService);
   private _skillLevelApi: SkillLevelApiService = inject(SkillLevelApiService);
+  private _notification: ToastrService = inject(ToastrService);
   private _formArrayCreatorsMap: Map<keyof UserListingFields, (item: UserListingModels) => FormGroup> = new Map<
     keyof UserListingFields,
     (item: UserListingModels) => FormGroup
@@ -135,7 +137,10 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
         ...this._getEducationRequests(),
         ...this._getCertificationRequests(),
         ...this._getSkillRequests()
-      ]).subscribe((): void => this._refreshProfile(true));
+      ]).subscribe((): void => {
+        this._notification.success('Profile has been successfully updated!');
+        this._refreshProfile(true);
+      });
     }
   }
 
@@ -318,6 +323,6 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
   }
 
   private _refreshProfile(isInitForm?: boolean): void {
-    this._auth.getMe().subscribe(() => isInitForm && this._initForm());
+    this._auth.getMe(true).subscribe(() => isInitForm && this._initForm());
   }
 }

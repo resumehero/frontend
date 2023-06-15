@@ -35,7 +35,7 @@ export class ChangePasswordComponent extends AbstractFormComponent implements Af
     this._userApi.setPassword(current_password, new_password).subscribe(() => {
       this.formGroup.reset();
       formRef.resetForm();
-      this._notification.success('Password has been successfully changed.');
+      this._notification.success('Password has been successfully changed!');
     });
   }
 

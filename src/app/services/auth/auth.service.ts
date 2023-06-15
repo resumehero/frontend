@@ -40,15 +40,17 @@ export class AuthService {
   login({ username: email, password, code }: ILoginParams, shouldRemember: boolean, services?: IServicesConfig): Observable<User> {
     this._storage.shouldUseLocalstorage = shouldRemember;
 
-    return this._http
-      .post(`/auth/jwt/create`, { email, password }, {}, services)
-      .pipe(map(this._onTokenResponse.bind(this)), switchMap(this.getMe.bind(this)));
+    return this._http.post(`/auth/jwt/create`, { email, password }, {}, services).pipe(
+      map(this._onTokenResponse.bind(this)),
+      switchMap(() => this.getMe())
+    );
   }
 
   refreshToken(): Observable<any> {
-    return this._http
-      .post(`/auth/jwt/refresh`, { refresh: this.token.refresh }, {}, {})
-      .pipe(map(this._onTokenResponse.bind(this)), switchMap(this.getMe.bind(this)));
+    return this._http.post(`/auth/jwt/refresh`, { refresh: this.token.refresh }, {}, {}).pipe(
+      map(this._onTokenResponse.bind(this)),
+      switchMap(() => this.getMe())
+    );
   }
 
   logout(): Observable<void> {
@@ -75,8 +77,8 @@ export class AuthService {
     return role;
   }
 
-  getMe(): Observable<User> {
-    return this._userApi.getMe({ skipErrorNotification: true }).pipe(
+  getMe(skipLoaderStart?: boolean): Observable<User> {
+    return this._userApi.getMe({ skipLoaderStart, skipErrorNotification: true }).pipe(
       map((user: User): User => {
         this.me$.next(user);
         this.setRole(user.role);
