@@ -1,5 +1,11 @@
+@import "variables/modules/breakpoints";
+
 .profile {
-  $side-gap: 28rem;
+  --side-gap: 28rem;
+
+  @media (max-width: $desktop-s) {
+    --side-gap: 16rem;
+  }
 
   &__section {
     display: flex;
@@ -9,7 +15,7 @@
   }
 
   &__section-title {
-    flex-basis: $side-gap;
+    flex-basis: var(--side-gap);
   }
 
   &__title {
@@ -33,7 +39,7 @@
   }
 
   &__section-actions {
-    flex-basis: $side-gap;
+    flex-basis: var(--side-gap);
   }
 
   &__form-field {
