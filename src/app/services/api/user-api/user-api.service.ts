@@ -17,7 +17,7 @@ export class UserApiService extends AbstractApiService<User> {
     return this.getItem('me', {}, services);
   }
 
-  confirmAccount(uid: string, token: string, services?: IServicesConfig): Observable<void> {
+  confirmAccount(uid: string, token: string, services?: IServicesConfig): Observable<any> {
     return this._http.post(`${this.url}/activation`, { uid, token }, {}, services);
   }
 
