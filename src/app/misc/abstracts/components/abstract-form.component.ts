@@ -2,8 +2,6 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from 
 import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { InputType } from '@models/enums/input-type.enum';
-import { IFormControlItem } from '@models/interfaces/forms/form-control-item.interface';
-import { FormControlItemType } from '@models/enums/form-control-item.type';
 
 export type FormControlRecord<KEY, VAL = AbstractControl> = Partial<Record<keyof KEY, VAL>>;
 
@@ -40,14 +38,6 @@ export abstract class AbstractFormComponent<F = any> implements OnInit, OnDestro
 
   getArray(name: keyof FormControlRecord<F>): FormArray {
     return this._getItemFormGroup(name) as FormArray;
-  }
-
-  setControlsArray(formControls: IFormControlItem[]): void {
-    if (!formControls.length) {
-      return;
-    }
-
-    formControls.forEach((itemControl: IFormControlItem): void => this.formGroup.addControl(itemControl.name, itemControl.control));
   }
 
   protected abstract _initForm(): void;

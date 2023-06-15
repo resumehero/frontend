@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '@services/auth/auth.service';
 import { ActivatedRoute, Params } from '@angular/router';
+import { PASSWORD_CONFIRM_TOKEN_KEY, PASSWORD_CONFIRM_UID_KEY } from '@misc/constants/_base.constant';
 
 @Component({
   selector: 'forgot-password',
@@ -9,15 +10,14 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class ForgotPasswordComponent implements OnInit, OnDestroy {
   token: string;
-  withToken: boolean = false;
+  uid: string;
 
   constructor(private _auth: AuthService, private _activatedRoute: ActivatedRoute) {
-    this._activatedRoute.queryParams.subscribe(({ token }: Params): void => {
-      if (token) {
-        this.token = token;
+    this._activatedRoute.params.subscribe((params: Params): void => {
+      if (params[PASSWORD_CONFIRM_TOKEN_KEY]) {
+        this.token = params[PASSWORD_CONFIRM_TOKEN_KEY];
+        this.uid = params[PASSWORD_CONFIRM_UID_KEY];
       }
-
-      this.withToken = !!this.token;
     });
   }
 

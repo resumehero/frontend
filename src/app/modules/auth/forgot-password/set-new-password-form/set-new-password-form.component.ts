@@ -6,24 +6,32 @@ import { CustomValidators } from '@misc/custom-validators';
 import { UserApiService } from '@services/api/user-api/user-api.service';
 import { AbstractFormComponent } from '@misc/abstracts/components/abstract-form.component';
 
+export interface IPasswordConfirm {
+  uid: string;
+  token: string;
+  new_password: string;
+  re_new_password: string;
+}
+
 @Component({
   selector: 'set-new-password-form',
   templateUrl: './set-new-password-form.component.html',
   styleUrls: ['./set-new-password-form.component.scss']
 })
-export class SetNewPasswordFormComponent extends AbstractFormComponent implements OnInit {
+export class SetNewPasswordFormComponent extends AbstractFormComponent<IPasswordConfirm> implements OnInit {
+  @Input() uid: string;
+  @Input() token: string;
   private _userApi: UserApiService = inject(UserApiService);
   private _router: Router = inject(Router);
-  @Input() token: string;
 
   onSubmit(): void {
     if (this.formGroup.invalid) {
       return;
     }
 
-    const { password: plainPassword }: { password: string; repeatPassword: string } = this.formGroup.getRawValue();
+    const body: IPasswordConfirm = this.formGroup.value;
 
-    this._userApi.updatePassword(this.token, { plainPassword }, { skipErrorNotification: true }).subscribe(this.onSubscribeNext.bind(this));
+    this._userApi.resetPasswordConfirm(body).subscribe(this.onSubscribeNext.bind(this));
   }
 
   onSubscribeNext(): void {
@@ -33,10 +41,12 @@ export class SetNewPasswordFormComponent extends AbstractFormComponent implement
   protected override _initForm(): void {
     this.formGroup = this._fb.group(
       {
-        password: ['', [Validators.required, VALIDATORS_SET.PASSWORD]],
-        repeatPassword: ['', [Validators.required, VALIDATORS_SET.PASSWORD]]
+        uid: [this.uid],
+        token: [this.token],
+        new_password: ['', [Validators.required, VALIDATORS_SET.PASSWORD]],
+        re_new_password: ['', [Validators.required, VALIDATORS_SET.PASSWORD]]
       },
-      { validators: [CustomValidators.mustMatch('password', 'repeatPassword')] }
+      { validators: [CustomValidators.mustMatch('new_password', 're_new_password')] }
     );
   }
 }

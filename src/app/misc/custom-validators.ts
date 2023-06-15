@@ -1,7 +1,4 @@
-import { AbstractControl, AsyncValidatorFn, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { UserApiService } from '@services/api/user-api/user-api.service';
-import { Observable, of } from 'rxjs';
-import { catchError, map, take } from 'rxjs/operators';
+import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export class CustomValidators {
   static password({ value }: AbstractControl): ValidationErrors | null {
@@ -58,16 +55,6 @@ export class CustomValidators {
       }
 
       return null;
-    };
-  }
-
-  static isUniqueValue(userApi: UserApiService): AsyncValidatorFn {
-    return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
-      return userApi.availableEmail(control.value, { skipErrorNotification: true, skipLoaderStart: true }).pipe(
-        take(1),
-        map((): null => null),
-        catchError((): Observable<ValidationErrors> => of({ notUniqueValue: true }))
-      );
     };
   }
 }
