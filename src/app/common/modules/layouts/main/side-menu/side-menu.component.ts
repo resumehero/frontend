@@ -82,8 +82,8 @@ export class SideMenuComponent implements OnInit {
         title: this._translate.instant(`${key}.TITLE`),
         message: this._translate.instant(`${key}.MESSAGE`),
         actions: [
-          { value: false, name: this._translate.instant('BUTTON_NAME.CANCEL'), type: 'close' },
-          { value: true, name: this._translate.instant('BUTTON_NAME.OK'), type: 'close' }
+          { value: false, name: this._translate.instant('BUTTON_NAME.CANCEL'), type: 'close', style: 'flat' },
+          { value: true, name: this._translate.instant('BUTTON_NAME.OK'), type: 'close', color: 'primary', style: 'flat' }
         ]
       })
       .pipe(mergeMap((): Observable<void> => this._auth.logout()))
