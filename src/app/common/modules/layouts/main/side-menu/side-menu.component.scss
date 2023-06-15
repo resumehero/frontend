@@ -26,10 +26,44 @@
   padding-right: var(--sidebar-side-indent);
 
   &_collapsed {
-    --main-side-padding: 2rem;
+    --main-side-padding: 1.2rem;
     --item-side-padding: 3rem;
     --avatar-size: 4rem;
     width: 10rem;
+
+    #{$self}__logo {
+      width: 2rem;
+      min-width: 2rem;
+    }
+
+    #{$self}__add-btn {
+      padding: 0;
+
+      .mat-icon {
+        margin: 0;
+      }
+    }
+
+    #{$self}__add-btn-text {
+      display: none;
+    }
+
+    #{$self}__actions {
+      display: flex;
+      justify-content: center;
+    }
+
+    #{$self}__action {
+      padding: 0;
+
+      .mat-icon {
+        margin: 0;
+      }
+    }
+
+    #{$self}__action-text {
+      display: none;
+    }
   }
 
   &__inner {
@@ -45,6 +79,7 @@
 
   &__header {
     padding: 4.5rem 0;
+    text-align: center;
   }
 
   &__divider {
