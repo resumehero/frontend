@@ -3,7 +3,7 @@
 .profile {
   --side-gap: 28rem;
 
-  @media (max-width: $desktop-s) {
+  @media (max-width: $desktop-m) {
     --side-gap: 16rem;
   }
 

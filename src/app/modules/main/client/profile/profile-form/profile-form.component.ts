@@ -149,7 +149,7 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
 
     this.formGroup = this._fb.group<FormControlRecord<User, unknown>>({
       id: [me.id],
-      photo: [me.photo?.full_size ? plainToInstance(ApiFile, { photo: me.photo?.full_size || '' }) : null],
+      photo: [me.photo?.thumbnail ? plainToInstance(ApiFile, { photo: me.photo?.thumbnail || '' }) : null],
       first_name: [me.first_name ?? '', [Validators.required]],
       last_name: [me.last_name ?? '', [Validators.required]],
       email: [me.email ?? '', [Validators.required]],
