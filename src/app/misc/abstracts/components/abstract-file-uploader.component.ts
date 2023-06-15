@@ -15,8 +15,6 @@ import { HttpServiceError } from '@services/http/http-service-error.class';
   template: ''
 })
 export abstract class AbstractFileUploaderComponent extends AbstractFormFieldComponent implements OnInit {
-  protected abstract _fileApi: AbstractApiService<ApiFile>;
-  protected _sanitizer: DomSanitizer = inject(DomSanitizer);
   @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement>;
   @Output() fileDragover: EventEmitter<DragEvent> = new EventEmitter<DragEvent>();
   @Output() fileDragleave: EventEmitter<DragEvent> = new EventEmitter<DragEvent>();
@@ -29,6 +27,8 @@ export abstract class AbstractFileUploaderComponent extends AbstractFormFieldCom
   filesWithError: Set<string> = new Set<string>();
   selectFile: ApiFile[] = [];
   fileError: string = '';
+  protected abstract _fileApi: AbstractApiService<ApiFile>;
+  protected _sanitizer: DomSanitizer = inject(DomSanitizer);
 
   get isFileError(): boolean {
     return (this.control?.invalid && this.control?.touched) || !!this.fileError;
@@ -108,20 +108,23 @@ export abstract class AbstractFileUploaderComponent extends AbstractFormFieldCom
     event.stopPropagation();
     event.preventDefault();
     const haveBeenErrored: boolean = Boolean(this.fileError);
-    this.filesWithError.delete(this.selectFile?.find?.((file: ApiFile, index: number): boolean => idx === index)?.name as string);
-    this.selectFile = (this.selectFile as ApiFile[]).filter((file: ApiFile, index: number): boolean => idx !== index);
-    this.control.setValue(
-      this.control.value?.length ? this.control.value.filter((file: File, index: number): boolean => idx !== index) : null
-    );
-    this.control.markAsDirty();
-    if (this.fileInput?.nativeElement) {
-      this.fileInput.nativeElement.value = this.control.value?.length
-        ? this.control.value.filter((file: File, index: number): boolean => idx !== index)
-        : null;
-    }
-    if (haveBeenErrored && this.fileValidation(this.selectFile as any as File[])) {
-      this.fileUploadHandler(this.selectFile as any as File[]);
-    }
+
+    this._fileApi.deleteItem().subscribe(() => {
+      this.filesWithError.delete(this.selectFile?.find?.((file: ApiFile, index: number): boolean => idx === index)?.name as string);
+      this.selectFile = (this.selectFile as ApiFile[]).filter((file: ApiFile, index: number): boolean => idx !== index);
+      this.control.setValue(
+        this.control.value?.length ? this.control.value.filter((file: File, index: number): boolean => idx !== index) : null
+      );
+
+      if (this.fileInput?.nativeElement) {
+        this.fileInput.nativeElement.value = this.control.value?.length
+          ? this.control.value.filter((file: File, index: number): boolean => idx !== index)
+          : null;
+      }
+      if (haveBeenErrored && this.fileValidation(this.selectFile as any as File[])) {
+        this.fileUploadHandler(this.selectFile as any as File[]);
+      }
+    });
   }
 
   isFileMaxSize(file: ApiFile | File): boolean {

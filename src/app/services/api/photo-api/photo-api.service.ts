@@ -17,4 +17,12 @@ export class PhotoApiService extends AbstractApiService<ApiFile> {
   override createItem(data: Params, params?: Params, servicesConfig?: IServicesConfig): Observable<ApiFile> {
     return this._http.post(this.url, data, { params }, servicesConfig).pipe(toModel(this._MODEL));
   }
+
+  uploadMedia(file: File, servicesConfig?: IServicesConfig): Observable<ApiFile> {
+    const body = new FormData();
+
+    body.append('photo', file);
+
+    return this._http.post(this.url, body, {}, servicesConfig).pipe(toModel(this._MODEL));
+  }
 }

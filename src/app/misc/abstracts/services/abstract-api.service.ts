@@ -60,8 +60,8 @@ export abstract class AbstractApiService<T extends AbstractModel> {
     return this._http.put(`${this.url}/${data.id}`, body, { params }, servicesConfig).pipe(toModel(this._MODEL));
   }
 
-  deleteItem(id: string, servicesConfig?: IServicesConfig): Observable<void> {
-    return this._http.delete(`${this.url}/${id}`, {}, servicesConfig);
+  deleteItem(id?: string, servicesConfig?: IServicesConfig): Observable<void> {
+    return this._http.delete(id ? `${this.url}/${id}` : this.url, {}, servicesConfig);
   }
 
   transit(id: string, data: ITransitData, servicesConfig?: IServicesConfig): Observable<T> {

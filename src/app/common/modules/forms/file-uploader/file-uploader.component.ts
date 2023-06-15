@@ -1,10 +1,10 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { AbstractFileUploaderComponent } from '@misc/abstracts/components/abstract-file-uploader.component';
 import { ThemePalette } from '@angular/material/core';
-import { FileApiService } from '@services/api/file-api/file-api.service';
 import { IServicesConfig } from '@services/http/http.service';
 import { Observable } from 'rxjs';
 import { ApiFile } from '@models/classes/file.model';
+import { PhotoApiService } from '@services/api/photo-api/photo-api.service';
 
 @Component({
   selector: 'file-uploader',
@@ -12,7 +12,7 @@ import { ApiFile } from '@models/classes/file.model';
   styleUrls: ['./file-uploader.component.scss']
 })
 export class FileUploaderComponent extends AbstractFileUploaderComponent implements OnInit {
-  protected _fileApi: FileApiService = inject(FileApiService);
+  protected _fileApi: PhotoApiService = inject(PhotoApiService);
   @Input() previewHeight: number = 160;
   @Input() previewWidth: number = 225;
   @Input() actionsXPosition: 'start' | 'end' = 'end';

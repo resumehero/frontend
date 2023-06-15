@@ -23,7 +23,6 @@ import { SkillsApiService } from '@services/api/skills-api/skills-api.service';
 import { SkillLevelApiService } from '@services/api/skill-level-api/skill-level-api.service';
 import { AbstractApiService } from '@misc/abstracts/services/abstract-api.service';
 import { AbstractModel } from '@models/classes/_base.model';
-import { PhotoApiService } from '@services/api/photo-api/photo-api.service';
 import { ApiFile } from '@models/classes/file.model';
 
 type UserListingFields = Pick<User, 'work_experiences' | 'accomplishments' | 'educations' | 'certifications' | 'skills'>;
@@ -60,7 +59,6 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
   private _certificationApi: CertificationApiService = inject(CertificationApiService);
   private _skillApi: SkillsApiService = inject(SkillsApiService);
   private _skillLevelApi: SkillLevelApiService = inject(SkillLevelApiService);
-  private _photoApi: PhotoApiService = inject(PhotoApiService);
   private _formArrayCreatorsMap: Map<keyof UserListingFields, (item: UserListingModels) => FormGroup> = new Map<
     keyof UserListingFields,
     (item: UserListingModels) => FormGroup
@@ -146,7 +144,7 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
 
     this.formGroup = this._fb.group<FormControlRecord<User, unknown>>({
       id: [me.id],
-      photo: [plainToInstance(ApiFile, { photo: me.photo?.full_size || '' })],
+      photo: [me.photo?.full_size ? plainToInstance(ApiFile, { photo: me.photo?.full_size || '' }) : null],
       first_name: [me.first_name ?? '', [Validators.required]],
       last_name: [me.last_name ?? '', [Validators.required]],
       email: [me.email ?? '', [Validators.required]],
