@@ -33,8 +33,8 @@ export class JwtInterceptor implements HttpInterceptor {
 
   private _shouldHandleUnauthorized(error: HttpErrorResponse, req: HttpRequest<any>): boolean {
     const isUnauthorizedResponse: boolean = (error as HttpErrorResponse).status === 401;
-    const isNotIgnoredPage: boolean = [].every((page: string): boolean => !this._router.url.includes(page));
-    const isNotIgnoredEndpoint: boolean = ['/api/token'].every((endpoint: string): boolean => !req.url.includes(endpoint));
+    const isNotIgnoredPage: boolean = ['/auth/log-in'].every((page: string): boolean => !this._router.url.includes(page));
+    const isNotIgnoredEndpoint: boolean = ['/jwt/create', '/jwt/refresh'].every((endpoint: string): boolean => !req.url.includes(endpoint));
 
     return isUnauthorizedResponse && isNotIgnoredPage && isNotIgnoredEndpoint;
   }

@@ -142,7 +142,7 @@ export abstract class AbstractFileUploaderComponent extends AbstractFormFieldCom
     this.fileSafeUrl =
       file instanceof File
         ? (this._sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(file)) as string)
-        : (this._sanitizer.bypassSecurityTrustResourceUrl(file.photo) as string);
+        : (this._sanitizer.bypassSecurityTrustResourceUrl(file?.photo) as string);
     this._cdr.detectChanges();
   }
 

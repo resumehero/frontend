@@ -22,7 +22,7 @@ export class AuthService {
   private _userApi: UserApiService = inject(UserApiService);
 
   get isAuthenticated(): boolean {
-    return Boolean(this.myRole && this.token?.access && this.token?.refresh);
+    return Boolean(this.myRole && this.token?.access);
   }
 
   get token(): Token | null {
