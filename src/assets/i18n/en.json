@@ -80,5 +80,9 @@
         "USER_NOT_FOUND": "User is not found"
       }
     }
+  },
+  "FILE_UPLOADER": {
+    "FILE_SIZE": "File too large",
+    "SELECTED_FILES_MAX": "Too many files selected"
   }
 }

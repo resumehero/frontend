@@ -27,6 +27,7 @@ export abstract class AbstractFileUploaderComponent extends AbstractFormFieldCom
   filesWithError: Set<string> = new Set<string>();
   selectFile: ApiFile[] = [];
   fileError: string = '';
+  fileSafeUrl: string;
   protected abstract _fileApi: AbstractApiService<ApiFile>;
   protected _sanitizer: DomSanitizer = inject(DomSanitizer);
 
@@ -44,6 +45,7 @@ export abstract class AbstractFileUploaderComponent extends AbstractFormFieldCom
 
   ngOnInit(): void {
     this.selectFile = this.valueControl ? (this.multiple ? (this.control.value as ApiFile[]) : [this.control.value]) : [];
+    this.setSafeUrl(this.selectFile[0]);
   }
 
   getFiles(event: Event): File[] {
@@ -65,8 +67,10 @@ export abstract class AbstractFileUploaderComponent extends AbstractFormFieldCom
       }
     }
 
-    this.selectFile.push(...(filteredFiles as any as ApiFile[]));
-    this.fileUploadHandler(filteredFiles);
+    if (this.fileValidation(filteredFiles)) {
+      this.selectFile.push(...(filteredFiles as any as ApiFile[]));
+      this.fileUploadHandler(filteredFiles);
+    }
   }
 
   fileUploadHandler(files: File[]): void {
@@ -83,6 +87,8 @@ export abstract class AbstractFileUploaderComponent extends AbstractFormFieldCom
       })
     ).subscribe((apiFiles: ApiFile[]): void => {
       this.control.setValue(this.multiple ? apiFiles : apiFiles[0]);
+      this.control.markAsDirty();
+      this.setSafeUrl(apiFiles[0]);
     });
   }
 
@@ -115,6 +121,7 @@ export abstract class AbstractFileUploaderComponent extends AbstractFormFieldCom
       this.control.setValue(
         this.control.value?.length ? this.control.value.filter((file: File, index: number): boolean => idx !== index) : null
       );
+      this.control.markAsDirty();
 
       if (this.fileInput?.nativeElement) {
         this.fileInput.nativeElement.value = this.control.value?.length
@@ -127,20 +134,16 @@ export abstract class AbstractFileUploaderComponent extends AbstractFormFieldCom
     });
   }
 
-  isFileMaxSize(file: ApiFile | File): boolean {
-    return this._toMB(file.size) > this.maxSizeFile;
-  }
-
   chooseAnotherFile(): void {
     this.fileInput?.nativeElement.dispatchEvent(new MouseEvent('click'));
   }
 
-  getNativeFileUrl(file: ApiFile | File): string {
-    if (file instanceof ApiFile) {
-      return this._sanitizer.bypassSecurityTrustResourceUrl(file.photo) as string;
-    }
-
-    return this._sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(file)) as string;
+  setSafeUrl(file: ApiFile | File): void {
+    this.fileSafeUrl =
+      file instanceof File
+        ? (this._sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(file)) as string)
+        : (this._sanitizer.bypassSecurityTrustResourceUrl(file.photo) as string);
+    this._cdr.detectChanges();
   }
 
   protected abstract _upload(file: File, servicesConfig: IServicesConfig): Observable<ApiFile>;

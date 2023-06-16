@@ -1,4 +1,4 @@
-<form class="profile">
+<form (ngSubmit)="submitForm()" [formGroup]="formGroup" class="profile">
   <section class="profile__section">
     <div class="profile__section-title">
       <h4 class="profile__title">General</h4>
@@ -9,6 +9,7 @@
         <div class="profile__form-row">
           <file-uploader
             [control]="this.getControl('photo')"
+            [fileType]="avatarFileTypes"
             [icon]="'camera'"
             [placeholder]="'Add your photo\n(you can upload .jpg .png, less than 5 Mb)'"
             [previewHeight]="100"
@@ -36,9 +37,7 @@
     <ng-container *ngTemplateOutlet="sectionTemplate; context: section"></ng-container>
   </ng-container>
 
-  <button (click)="submitForm()" [color]="'primary'" [disabled]="!formGroup.dirty" class="profile__button" mat-flat-button>
-    Save changes
-  </button>
+  <button [color]="'primary'" [disabled]="!formGroup.dirty" class="profile__button" mat-flat-button type="submit">Save changes</button>
 </form>
 
 <ng-template #sectionTemplate let-addBtnName="addBtnName" let-fieldsTemplate="fieldsTemplate" let-listName="listName" let-title="title">

@@ -41,6 +41,7 @@
     .mat-mdc-text-field-wrapper {
       background: var(--bg-color);
       border: 2px solid var(--border-color);
+      height: var(--input-height);
       border-radius: 0.4rem;
       transition: border 0.2s ease-in-out;
 

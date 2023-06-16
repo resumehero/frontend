@@ -25,6 +25,7 @@ import { AbstractApiService } from '@misc/abstracts/services/abstract-api.servic
 import { AbstractModel } from '@models/classes/_base.model';
 import { ApiFile } from '@models/classes/file.model';
 import { ToastrService } from 'ngx-toastr';
+import { FileType } from '@models/enums/file-type.enum';
 
 type UserListingFields = Pick<User, 'work_experiences' | 'accomplishments' | 'educations' | 'certifications' | 'skills'>;
 type UserListingModels = WorkExperience & Accomplishment & Education & Certification & Skill;
@@ -47,6 +48,7 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
   @ViewChild('educationTemplate') educationTemplate: TemplateRef<unknown>;
   @ViewChild('certificationsTemplate') certificationsTemplate: TemplateRef<unknown>;
   @ViewChild('skillsTemplate') skillsTemplate: TemplateRef<unknown>;
+  avatarFileTypes: FileType[] = [FileType.jpeg, FileType.png];
   industryOptions: IOption[] = [];
   skillLevelOptions: IOption[] = [];
   formSections: IFormSection[] = [];
@@ -137,10 +139,7 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
         ...this._getEducationRequests(),
         ...this._getCertificationRequests(),
         ...this._getSkillRequests()
-      ]).subscribe((): void => {
-        this._notification.success('Profile has been successfully updated!');
-        this._refreshProfile(true);
-      });
+      ]).subscribe((): void => this._refreshProfile(true, 'Profile has been successfully updated!'));
     }
   }
 
@@ -176,7 +175,7 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
     if (id) {
       apiService.deleteItem(id).subscribe((): void => {
         this.getArray(arrayName).removeAt(idx);
-        this._refreshProfile();
+        this._refreshProfile(false, 'List item has been successfully deleted.');
       });
     } else {
       this.getArray(arrayName).removeAt(idx);
@@ -322,7 +321,10 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
     return new FormArray(array.map((entity: UserListingModels): FormGroup => this._getGroupByName(field, entity)));
   }
 
-  private _refreshProfile(isInitForm?: boolean): void {
-    this._auth.getMe(true).subscribe(() => isInitForm && this._initForm());
+  private _refreshProfile(isInitForm: boolean, successMessage: string): void {
+    this._auth.getMe().subscribe((): void => {
+      isInitForm && this._initForm();
+      this._notification.success(successMessage);
+    });
   }
 }
