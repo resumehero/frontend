@@ -24,9 +24,10 @@
   @if $typography-config != null {
     @include typography($theme);
   }
+
   .cdk-overlay-pane:not(.mat-mdc-select-panel-above) {
     .base-select-panel.mdc-menu-surface.mat-mdc-select-panel {
-      border: 1px solid rgba(56, 56, 138, 0.12);
+      border: 1px solid rgba(56, 56, 138, 12%);
       box-shadow: var(--card-shadow);
       border-radius: 1.5rem;
       padding: 0;
