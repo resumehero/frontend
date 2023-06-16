@@ -10,6 +10,7 @@ import { IOption } from '@models/interfaces/forms/option.interface';
 export class BaseSelectComponent extends AbstractFormFieldComponent {
   @Input() options: IOption[];
   @Input() multiple: boolean;
+  @Input() panelClass: string = 'base-select-panel';
   @Input() triggerTemplate: TemplateRef<any>;
   @Input() optionTemplate: TemplateRef<any>;
   @Input() getValue: (item: IOption) => any = item => (item as IOption).value;

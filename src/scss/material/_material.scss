@@ -3,6 +3,7 @@
 @use "material/modules/button-theme" as button;
 @use "material/modules/form-field-theme" as form-field;
 @use "material/modules/tab-nav-bar-theme" as tab-nav-bar;
+@use "material/modules/select-theme" as select;
 
 @use "material/palettes/custom-primary" as primary;
 @use "material/palettes/custom-accent" as accent;
@@ -46,3 +47,4 @@ $custom-theme: mat.define-light-theme(
 @include button.theme($custom-theme);
 @include form-field.theme($custom-theme);
 @include tab-nav-bar.theme($custom-theme);
+@include select.theme($custom-theme);
