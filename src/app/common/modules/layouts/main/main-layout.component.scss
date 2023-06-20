@@ -10,8 +10,11 @@
   flex-grow: 1;
   background-color: var(--color-grey-light);
   overflow-y: auto;
+  height: 100vh;
 
   &__side-menu {
+    position: sticky;
+    top: 0;
     flex-shrink: 0;
   }
 
