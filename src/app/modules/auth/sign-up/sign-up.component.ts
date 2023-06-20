@@ -29,7 +29,8 @@ export class SignUpComponent extends AbstractFormComponent {
     this._userApi.createItem({ email, password }).subscribe((): void => {
       this._router.navigate(['']);
       this._notification.success(
-        'Your account has been successfully created.\nPlease check your inbox and follow the instructions in the email to verify your account.'
+        `Your account has been successfully created.
+        Please check your inbox and follow the instructions in the email to verify your account.`
       );
     });
   }

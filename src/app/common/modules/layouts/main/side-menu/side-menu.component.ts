@@ -10,7 +10,6 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { User } from '@models/classes/user/user.model';
 import { ModalService } from '@shared/modal/modal.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ResumeService } from '@services/resume/resume.service';
 import { CreateResumeComponent } from '@modules/main/client/resumes/create-resume/create-resume.component';
 
 @Component({
@@ -30,7 +29,6 @@ export class SideMenuComponent implements OnInit {
   private _modal: ModalService = inject(ModalService);
   private _auth: AuthService = inject(AuthService);
   private _router: Router = inject(Router);
-  private _resumeService: ResumeService = inject(ResumeService);
   private _modalService: ModalService = inject(ModalService);
 
   get navItems(): INavLink[] {

@@ -11,7 +11,7 @@ export class ResumeApiService extends AbstractApiService<Resume> {
   protected readonly _URL_PATH: string = '/resume/resumes';
   protected readonly _MODEL: ClassConstructor<Resume> = Resume;
 
-  generateResume(body: ResumeCreate): Observable<any> {
+  generateResume(body: ResumeCreate): Observable<Resume> {
     return this._http.post(`/resume/generate_resume`, body);
   }
 }

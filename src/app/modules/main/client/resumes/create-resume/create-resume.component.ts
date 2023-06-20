@@ -8,8 +8,11 @@ import { fadeInOut } from '@base/animations/appearance.animations';
 import { ResumeApiService } from '@services/api/resume-api/resume-api.service';
 import { ResumeTemplateApiService } from '@services/api/resume-template-api/resume-template-api.service';
 import { IOption } from '@models/interfaces/forms/option.interface';
-import { tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { ResumeService } from '@services/resume/resume.service';
+import { Observable } from 'rxjs';
+import { ModalService } from '@shared/modal/modal.service';
+import { ResumeLoaderComponent } from '@modules/main/client/resumes/resume-loader/resume-loader.component';
 
 @Component({
   selector: 'create-resume',
@@ -25,6 +28,7 @@ export class CreateResumeComponent extends AbstractFormComponent<ResumeCreate> i
   private _resumeService: ResumeService = inject(ResumeService);
   private _resumeApi: ResumeApiService = inject(ResumeApiService);
   private _resumeTemplateApi: ResumeTemplateApiService = inject(ResumeTemplateApiService);
+  private _modalService: ModalService = inject(ModalService);
 
   get typeControl(): FormControl {
     return this.form?.resume_type as FormControl;
@@ -55,10 +59,22 @@ export class CreateResumeComponent extends AbstractFormComponent<ResumeCreate> i
       .generateResume(body)
       .pipe(
         tap(() => this._resumeApi.clearEntireCache()),
-        tap(() => this._resumeService.RESUME_CREATED$.next()),
-        tap(() => this.context.dialog.close(body))
+        tap(() => this.context.dialog.close(body)),
+        switchMap((res: Resume) => this._openResumeLoader(res))
       )
       .subscribe();
+  }
+
+  private _openResumeLoader(entity: Resume): Observable<unknown> {
+    return this._modalService
+      .open(
+        {
+          component: ResumeLoaderComponent,
+          context: { entity }
+        },
+        { width: '50rem', autoFocus: 'dialog', shouldHandleFalse: true }
+      )
+      .pipe(tap(() => this._resumeService.RESUME_CREATED$.next()));
   }
 
   private _handleResumeTypeChange(): void {

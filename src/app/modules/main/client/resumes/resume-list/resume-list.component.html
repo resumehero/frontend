@@ -18,9 +18,11 @@
       <p class="resume__date">{{ item.created | date : 'dd MMM, yyyy' }}</p>
     </div>
     <div class="resume__controls">
-      <button (click)="downloadItem(item)" [color]="'primary'" mat-icon-button matTooltip="Download">
-        <mat-icon [svgIcon]="'cloud-download'"></mat-icon>
-      </button>
+      <div [matTooltipDisabled]="!!item.resume_file" [matTooltip]="'Resume is not ready for download yet'">
+        <button (click)="downloadItem(item)" [color]="'primary'" [disabled]="!item.resume_file" [matTooltip]="'Download'" mat-icon-button>
+          <mat-icon [svgIcon]="'cloud-download'"></mat-icon>
+        </button>
+      </div>
       <button (click)="deleteItem(item)" [color]="'warn'" mat-icon-button matTooltip="Delete">
         <mat-icon [svgIcon]="'trash'"></mat-icon>
       </button>

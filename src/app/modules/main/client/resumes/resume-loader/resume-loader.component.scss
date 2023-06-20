@@ -1,0 +1,18 @@
+.resume-loader {
+  text-align: center;
+
+  &__spinner {
+    margin: 0 auto 2.6rem;
+  }
+
+  &__title {
+    font-weight: var(--fw-semi-bold);
+    margin-bottom: 1rem;
+  }
+
+  &__sub-title {
+    font-size: 1.4rem;
+    line-height: 160%;
+    letter-spacing: 0.01em;
+  }
+}

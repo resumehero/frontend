@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, inject, OnInit } from '@angular/core';
 import { AbstractListingApiComponent } from '@misc/abstracts/components/abstract-listing-api.component';
 import { List } from '@models/classes/_list.model';
 import { Resume, ResumeFileIconMap } from '@models/classes/resume.model';
@@ -8,6 +8,8 @@ import { ToolbarHelperService } from '@services/toolbar-helper/toolbar-helper.se
 import { ResumeApiService } from '@services/api/resume-api/resume-api.service';
 import { tap } from 'rxjs/operators';
 import { ResumeService } from '@services/resume/resume.service';
+import { downloadFile } from '@misc/helpers/file-download';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'resume-list',
@@ -20,6 +22,10 @@ export class ResumeListComponent extends AbstractListingApiComponent<Resume> imp
   private _resumeApi: ResumeApiService = inject(ResumeApiService);
   private _resumeService: ResumeService = inject(ResumeService);
 
+  constructor(@Inject(DOCUMENT) private _document: Document) {
+    super();
+  }
+
   override ngOnInit(): void {
     super.ngOnInit();
     this._resumeService.RESUME_CREATED$.pipe(tap((): void => this._updateList(true))).subscribe();
@@ -30,7 +36,8 @@ export class ResumeListComponent extends AbstractListingApiComponent<Resume> imp
   }
 
   downloadItem(item: Resume): void {
-    // implement
+    if (!item.resume_file) return;
+    downloadFile(this._document, item.resume_file.file);
   }
 
   deleteItem(item: Resume): void {
@@ -50,6 +57,6 @@ export class ResumeListComponent extends AbstractListingApiComponent<Resume> imp
   }
 
   protected override _getItems(params: Params): Observable<List<Resume>> {
-    return this._resumeApi.getItems(params);
+    return this._resumeApi.getItems(params, { skipCaching: true });
   }
 }
