@@ -28,7 +28,12 @@
     class="auth-form__field"
   ></base-form-input>
 
-  <base-boolean-field [type]="BooleanFieldType.checkbox" class="auth-form__agreement">
+  <base-boolean-field
+    [control]="form?.agreement"
+    [placeholder]="'Agreement'"
+    [type]="BooleanFieldType.checkbox"
+    class="auth-form__agreement"
+  >
     I agree to
     <a [routerLink]="'/static/terms-of-use'" class="link" target="_blank">Terms of Use</a>
     and

@@ -37,7 +37,7 @@ export abstract class AbstractFormFieldComponent implements OnChanges, OnDestroy
 
   get errorMessage(): string {
     const mainTranslateKey: string = 'ERROR_MESSAGE';
-    const fieldName: string = this.placeholder;
+    const fieldName: string = this.placeholder || 'This field';
 
     switch (true) {
       case this.control?.hasError('mustMatch'):

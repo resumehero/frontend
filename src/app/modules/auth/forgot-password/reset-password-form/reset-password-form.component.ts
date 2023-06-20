@@ -4,6 +4,7 @@ import { VALIDATORS_SET } from '@misc/constants/validators-set.constant';
 import { UserApiService } from '@services/api/user-api/user-api.service';
 import { Router } from '@angular/router';
 import { AbstractFormComponent } from '@misc/abstracts/components/abstract-form.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'reset-password-form',
@@ -13,6 +14,7 @@ import { AbstractFormComponent } from '@misc/abstracts/components/abstract-form.
 export class ResetPasswordFormComponent extends AbstractFormComponent implements OnInit {
   private _userApi: UserApiService = inject(UserApiService);
   private _router: Router = inject(Router);
+  private _notification: ToastrService = inject(ToastrService);
 
   onSubmit(): void {
     if (this.formGroup.invalid) {
@@ -23,6 +25,7 @@ export class ResetPasswordFormComponent extends AbstractFormComponent implements
   }
 
   onSubscribeNext(): void {
+    this._notification.success('If the user with this email is registered in the system, we will send a link to reset the password.');
     this._router.navigate(['', 'auth', 'log-in']);
   }
 

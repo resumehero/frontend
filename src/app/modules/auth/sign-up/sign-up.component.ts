@@ -21,6 +21,7 @@ export class SignUpComponent extends AbstractFormComponent {
 
   onSubmit(): void {
     if (this.formGroup.invalid) {
+      this.formGroup.markAllAsTouched();
       return;
     }
 
@@ -40,7 +41,8 @@ export class SignUpComponent extends AbstractFormComponent {
       {
         email: new FormControl('', [Validators.required, VALIDATORS_SET.EMAIL]),
         password: new FormControl('', [Validators.required, VALIDATORS_SET.PASSWORD]),
-        repeatPassword: new FormControl('', [Validators.required, VALIDATORS_SET.PASSWORD])
+        repeatPassword: new FormControl('', [Validators.required, VALIDATORS_SET.PASSWORD]),
+        agreement: new FormControl(false, [Validators.requiredTrue])
       },
       { validators: [CustomValidators.mustMatch('password', 'repeatPassword')] }
     );
