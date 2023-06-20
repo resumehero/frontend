@@ -33,7 +33,7 @@
     "block-no-empty": true,
     "selector-pseudo-class-no-unknown": true,
     "selector-pseudo-element-no-unknown": [true, { "ignorePseudoElements": ["/ng/"] }],
-    "media-feature-name-no-unknown": true,
+    "media-feature-name-no-unknown": null,
     "at-rule-no-unknown": [
       true,
       {

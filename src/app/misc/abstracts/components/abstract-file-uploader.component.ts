@@ -53,6 +53,8 @@ export abstract class AbstractFileUploaderComponent extends AbstractFormFieldCom
   }
 
   fileChangeHandler(files: File[]): void {
+    if (!files.length) return;
+
     const filteredFiles: File[] = files.filter(
       (file: File): boolean =>
         this.fileType.some((ft: FileType): boolean => ft === FileType.any || ft.includes(file.type)) &&
@@ -132,10 +134,6 @@ export abstract class AbstractFileUploaderComponent extends AbstractFormFieldCom
         this.fileUploadHandler(this.selectFile as any as File[]);
       }
     });
-  }
-
-  chooseAnotherFile(): void {
-    this.fileInput?.nativeElement.dispatchEvent(new MouseEvent('click'));
   }
 
   setSafeUrl(file: ApiFile | File): void {

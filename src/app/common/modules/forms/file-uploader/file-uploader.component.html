@@ -20,7 +20,7 @@
     />
     <mat-icon [svgIcon]="icon" class="file-uploader__icon"></mat-icon>
     <ng-container *ngIf="selectFile?.[0] as file">
-      <img [src]="fileSafeUrl" alt="Image" class="file-uploader__preview" />
+      <img *ngIf="fileSafeUrl" [src]="fileSafeUrl" alt="Image" class="file-uploader__preview" />
       <div *ngIf="!filesOnLoading.has(file.name)" [ngClass]="actionsPositionClasses" class="file-uploader__file-actions">
         <button (click)="removeFile(0, $event)" [color]="actionsColor" class="file-uploader__action" mat-icon-button type="button">
           <mat-icon svgIcon="trash"></mat-icon>
