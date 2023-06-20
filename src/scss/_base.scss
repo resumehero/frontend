@@ -19,6 +19,11 @@ body {
   -webkit-tap-highlight-color: transparent;
   -webkit-font-smoothing: antialiased;
 
+  @media (min-device-pixel-ratio: 2) and (max-width: $desktop-m) {
+    text-size-adjust: none;
+    zoom: 0.92;
+  }
+
   b, strong {
     font-weight: var(--fw-medium);
   }

@@ -1,10 +1,10 @@
 @import "variables/modules/breakpoints";
 
 .profile {
-  --side-gap: 28rem;
+  --side-gap: 18%;
 
   @media (max-width: $desktop-m) {
-    --side-gap: 16rem;
+    --side-gap: 12%;
   }
 
   &__section {
@@ -12,6 +12,10 @@
     gap: 2rem;
     border-bottom: 1px solid rgba(56, 56, 138, 12%);
     margin-bottom: 2rem;
+
+    @media (max-width: $tablet-l) {
+      flex-direction: column;
+    }
   }
 
   &__section-title {
@@ -20,6 +24,7 @@
 
   &__title {
     font-weight: var(--fw-medium);
+    word-break: break-word;
   }
 
   &__section-content {
