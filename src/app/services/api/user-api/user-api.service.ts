@@ -17,6 +17,11 @@ export class UserApiService extends AbstractApiService<User> {
     return this.getItem('me', {}, services);
   }
 
+  updateMe(body: Partial<User>, services?: IServicesConfig): Observable<User> {
+    body.id = 'me';
+    return this.updateItem(body, {}, services);
+  }
+
   confirmAccount(uid: string, token: string, services?: IServicesConfig): Observable<any> {
     return this._http.post(`${this.url}/activation`, { uid, token }, {}, services);
   }

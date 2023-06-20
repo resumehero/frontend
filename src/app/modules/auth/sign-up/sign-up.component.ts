@@ -6,6 +6,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { VALIDATORS_SET } from '@misc/constants/validators-set.constant';
 import { CustomValidators } from '@misc/custom-validators';
 import { BooleanFieldType } from '@base/common/modules/forms/base-boolean-field/base-boolean-field.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'sign-up',
@@ -16,6 +17,7 @@ export class SignUpComponent extends AbstractFormComponent {
   readonly BooleanFieldType: typeof BooleanFieldType = BooleanFieldType;
   private _userApi: UserApiService = inject(UserApiService);
   private _router: Router = inject(Router);
+  private _notification: ToastrService = inject(ToastrService);
 
   onSubmit(): void {
     if (this.formGroup.invalid) {
@@ -24,7 +26,12 @@ export class SignUpComponent extends AbstractFormComponent {
 
     const { email, password } = this.formGroup.getRawValue();
 
-    this._userApi.createItem({ email, password }).subscribe((): Promise<boolean> => this._router.navigate(['']));
+    this._userApi.createItem({ email, password }).subscribe((): void => {
+      this._router.navigate(['']);
+      this._notification.success(
+        'Your account has been successfully created.\nPlease check your inbox and follow the instructions in the email to verify your account.'
+      );
+    });
   }
 
   protected override _initForm(): void {
