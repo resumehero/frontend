@@ -103,7 +103,9 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
   }
 
   addRow(arrayName: keyof UserListingFields): void {
-    this.getArray(arrayName).push(this._getGroupByName(arrayName, {} as UserListingModels));
+    const newGroup: FormGroup = this._getGroupByName(arrayName, {} as UserListingModels);
+    this.getArray(arrayName).push(newGroup);
+    newGroup.markAsDirty();
   }
 
   deleteRow(arrayName: keyof UserListingFields, idx: number): void {

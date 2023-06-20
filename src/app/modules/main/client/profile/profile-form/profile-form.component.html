@@ -47,13 +47,13 @@
     </div>
 
     <div class="profile__section-content">
-      <div *ngFor="let item of getArrayControls(listName); let idx = index" class="profile__section-form">
+      <div *ngFor="let item of getArrayControls(listName) as items; let idx = index" class="profile__section-form">
         <div class="profile__form-row">
           <ng-container *ngTemplateOutlet="fieldsTemplate; context: { $implicit: item }"></ng-container>
         </div>
 
         <div class="profile__section-actions">
-          <button (click)="deleteRow(listName, idx)" [color]="'warn'" mat-stroked-button type="button">
+          <button (click)="deleteRow(listName, idx)" *ngIf="items.length > 1" [color]="'warn'" mat-stroked-button type="button">
             <mat-icon [svgIcon]="'trash'"></mat-icon>
           </button>
         </div>
