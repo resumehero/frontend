@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { AuthService } from '@services/auth/auth.service';
 import { catchError, first, map, pairwise, switchMap, timeout } from 'rxjs/operators';
-import { Observable, of, timer } from 'rxjs';
+import { Observable, of, throwError, timer } from 'rxjs';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -56,7 +56,9 @@ export class JwtInterceptor implements HttpInterceptor {
   }
 
   private _fetchToken(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const observable$: Observable<any> = this._auth.token?.refresh ? this._auth.refreshToken() : of(null);
+    const observable$: Observable<any> = this._auth.token?.refresh
+      ? this._auth.refreshToken()
+      : throwError(() => new Error('No refresh token exist'));
 
     return observable$.pipe(
       catchError((error: HttpErrorResponse): never => {
