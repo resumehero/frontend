@@ -52,6 +52,7 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
   industryOptions: IOption[] = [];
   skillLevelOptions: IOption[] = [];
   formSections: IFormSection[] = [];
+  today: Date = new Date();
   private _toolbar: ToolbarHelperService = inject(ToolbarHelperService);
   private _auth: AuthService = inject(AuthService);
   private _userApi: UserApiService = inject(UserApiService);
@@ -153,7 +154,8 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
       photo: [me.photo?.thumbnail ? plainToInstance(ApiFile, { photo: me.photo?.thumbnail || '' }) : null],
       first_name: [me.first_name ?? '', [Validators.required]],
       last_name: [me.last_name ?? '', [Validators.required]],
-      email: [me.email ?? '', [Validators.required]],
+      // TODO: temp solution
+      email: [{ value: me.email ?? '', disabled: true }, [Validators.required]],
       phone_number: [me.phone_number ?? ''],
       industry: [me.industry?.id ?? ''],
       work_experiences: this._getFormArray(me, 'work_experiences'),

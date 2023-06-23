@@ -23,7 +23,7 @@ export abstract class AbstractFormFieldComponent implements OnChanges, OnDestroy
   @Input() appearance: MatFormFieldAppearance = 'fill';
   @Input() control: AbstractControl | undefined = new FormControl();
   @Input() floatLabel: FloatLabelType;
-  @Input() maxLength: number = 256;
+  @Input() maxLength: number = 1023;
   @Input() autocomplete: string = 'off';
   protected readonly _DESTROYED$: Subject<void> = new Subject<void>();
 

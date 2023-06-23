@@ -81,8 +81,19 @@
   <ng-container *ngIf="asArrayItemControls(item) as controls">
     <base-form-input [control]="controls.job_title" class="profile__form-field" placeholder="Job Title"></base-form-input>
     <base-form-input [control]="controls.employer" class="profile__form-field" placeholder="Employer"></base-form-input>
-    <base-datepicker [control]="controls.start_date" class="profile__form-field" placeholder="Start Date"></base-datepicker>
-    <base-datepicker [control]="controls.end_date" class="profile__form-field" placeholder="End Date"></base-datepicker>
+    <base-datepicker
+      [control]="controls.start_date"
+      [maxDate]="controls.end_date.value || today"
+      class="profile__form-field"
+      placeholder="Start Date"
+    ></base-datepicker>
+    <base-datepicker
+      [control]="controls.end_date"
+      [maxDate]="today"
+      [minDate]="controls.start_date.value"
+      class="profile__form-field"
+      placeholder="End Date"
+    ></base-datepicker>
     <base-textarea
       [control]="controls.description"
       class="profile__form-field profile__form-field_full-width"
@@ -95,8 +106,19 @@
   <ng-container *ngIf="asArrayItemControls(item) as controls">
     <base-form-input [control]="controls.degree" class="profile__form-field" placeholder="Degree"></base-form-input>
     <base-form-input [control]="controls.institution_name" class="profile__form-field" placeholder="School"></base-form-input>
-    <base-datepicker [control]="controls.start_date" class="profile__form-field" placeholder="Start Date"></base-datepicker>
-    <base-datepicker [control]="controls.end_date" class="profile__form-field" placeholder="End Date"></base-datepicker>
+    <base-datepicker
+      [control]="controls.start_date"
+      [maxDate]="controls.end_date.value || today"
+      class="profile__form-field"
+      placeholder="Start Date"
+    ></base-datepicker>
+    <base-datepicker
+      [control]="controls.end_date"
+      [maxDate]="today"
+      [minDate]="controls.start_date.value"
+      class="profile__form-field"
+      placeholder="End Date"
+    ></base-datepicker>
     <base-textarea
       [control]="controls.description"
       class="profile__form-field profile__form-field_full-width"
@@ -108,7 +130,7 @@
 <ng-template #certificationsTemplate let-item>
   <ng-container *ngIf="asArrayItemControls(item) as controls">
     <base-form-input [control]="controls.name" class="profile__form-field" placeholder="Certification"></base-form-input>
-    <base-datepicker [control]="controls.date" class="profile__form-field" placeholder="Date"></base-datepicker>
+    <base-datepicker [control]="controls.date" [maxDate]="today" class="profile__form-field" placeholder="Date"></base-datepicker>
   </ng-container>
 </ng-template>
 

@@ -41,6 +41,7 @@
       <label class="resume__label">Enter the vacancy text</label>
       <base-textarea
         [control]="form.vacancy_text"
+        [maxLength]="MAX_VACANCY_LENGTH"
         [maxRows]="6"
         [minRows]="4"
         class="resume__text"

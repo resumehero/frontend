@@ -4,7 +4,11 @@
   --side-gap: 18%;
 
   @media (max-width: $desktop-m) {
-    --side-gap: 12%;
+    --side-gap: 14rem;
+  }
+
+  @media (max-width: $tablet-l) {
+    --side-gap: 0;
   }
 
   &__section {
@@ -33,7 +37,6 @@
 
   &__section-form {
     display: flex;
-    gap: 2rem;
   }
 
   &__form-row {
@@ -45,6 +48,10 @@
 
   &__section-actions {
     flex-basis: var(--side-gap);
+
+    button {
+      margin-left: 2rem;
+    }
   }
 
   &__form-field {

@@ -29,6 +29,8 @@ export class CreateResumeComponent extends AbstractFormComponent<ResumeCreate> i
   private _resumeApi: ResumeApiService = inject(ResumeApiService);
   private _resumeTemplateApi: ResumeTemplateApiService = inject(ResumeTemplateApiService);
   private _modalService: ModalService = inject(ModalService);
+  readonly MIN_VACANCY_LENGTH: number = 32;
+  readonly MAX_VACANCY_LENGTH: number = 1024;
 
   get typeControl(): FormControl {
     return this.form?.resume_type as FormControl;
@@ -42,7 +44,13 @@ export class CreateResumeComponent extends AbstractFormComponent<ResumeCreate> i
     this.formGroup = this._fb.group<FormControlRecord<ResumeCreate, unknown>>({
       resume_type: [ResumeType.Default],
       resume_file_type: [ResumeFileType.DOC],
-      vacancy_text: { value: '', disabled: true },
+      vacancy_text: [
+        {
+          value: '',
+          disabled: true
+        },
+        [Validators.minLength(this.MIN_VACANCY_LENGTH), Validators.maxLength(this.MAX_VACANCY_LENGTH)]
+      ],
       resume_template_id: ['', Validators.required]
     });
     this._handleResumeTypeChange();
