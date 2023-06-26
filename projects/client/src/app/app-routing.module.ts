@@ -48,7 +48,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes, {
       paramsInheritanceStrategy: 'always',
       enableTracing: false,
-      scrollPositionRestoration: 'top',
+      scrollPositionRestoration: 'top'
     })
   ],
   exports: [RouterModule]
