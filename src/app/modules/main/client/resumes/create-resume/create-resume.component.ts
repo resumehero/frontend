@@ -49,7 +49,7 @@ export class CreateResumeComponent extends AbstractFormComponent<ResumeCreate> i
           value: '',
           disabled: true
         },
-        [Validators.minLength(this.MIN_VACANCY_LENGTH), Validators.maxLength(this.MAX_VACANCY_LENGTH)]
+        [Validators.required, Validators.minLength(this.MIN_VACANCY_LENGTH), Validators.maxLength(this.MAX_VACANCY_LENGTH)]
       ],
       resume_template_id: ['', Validators.required]
     });

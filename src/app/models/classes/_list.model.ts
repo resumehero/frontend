@@ -2,8 +2,8 @@ import { ClassConstructor } from 'class-transformer';
 import { convertToModelsArray } from '@misc/helpers/model-conversion/convert-to-models-array.function';
 
 export interface IListEntry<T = any> {
-  'hydra:member'?: T[];
-  'hydra:totalItems'?: number;
+  results?: T[];
+  total_items?: number;
   entities?: T[];
   total?: number;
 }
@@ -21,9 +21,9 @@ export class List<T = any> {
         items = listEntry as T[];
         count = (listEntry as T[])?.length;
         break;
-      case Boolean(listEntry?.['hydra:member']) && Boolean(listEntry?.['hydra:totalItems']):
-        items = listEntry['hydra:member'] as T[];
-        count = listEntry['hydra:totalItems'] as number;
+      case Boolean(listEntry?.results) && Boolean(listEntry?.total_items):
+        items = listEntry.results as T[];
+        count = listEntry.total_items as number;
         break;
       default:
         items = [];

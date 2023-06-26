@@ -24,7 +24,7 @@ export class QueryParamsService {
   static readonly BASE_KEYS: IQueryBuilderBaseKeys = Object.freeze({
     ORDER_BY: 'order-by',
     PAGE: 'page',
-    PER_PAGE: 'itemsPerPage'
+    PER_PAGE: 'per_page'
   });
   private readonly _PARAMS$: BehaviorSubject<Params> = new BehaviorSubject<Params>({});
   private _shouldTranslateParamsToURL: boolean = false;
