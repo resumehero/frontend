@@ -37,6 +37,18 @@
       ></base-select>
     </div>
 
+    <div class="resume__row">
+      <label class="resume__label">Enter the job title</label>
+      <base-textarea
+        [control]="form.job_title"
+        [maxLength]="MAX_VACANCY_LENGTH"
+        [maxRows]="6"
+        [minRows]="4"
+        class="resume__text"
+        placeholder="Start typing..."
+      ></base-textarea>
+    </div>
+
     <div *ngIf="typeControl.value === ResumeType.ForVacancy" @fadeInOut class="resume__row">
       <label class="resume__label">Enter the vacancy text</label>
       <base-textarea

@@ -17,6 +17,10 @@ export class UserBase extends AbstractModel {
   @Expose()
   phone_number: string;
   @Expose()
+  about: string;
+  @Expose()
+  city: string;
+  @Expose()
   photo?: Photo;
   @Expose({ name: 'emailVerified' })
   isEmailVerified: boolean;

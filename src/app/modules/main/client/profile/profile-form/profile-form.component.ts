@@ -125,12 +125,14 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
       return;
     }
 
-    const { id, first_name, last_name, phone_number, industry }: User = this.formGroup.value;
+    const { id, first_name, last_name, phone_number, industry, city, about }: User = this.formGroup.value;
     const userData: Partial<User> = {
       id,
       first_name,
       last_name,
-      phone_number
+      phone_number,
+      city,
+      about
     };
 
     if (this.formGroup.dirty) {
@@ -158,6 +160,8 @@ export class ProfileFormComponent extends AbstractFormComponent<Partial<User>> i
       email: [{ value: me.email ?? '', disabled: true }, [Validators.required]],
       phone_number: [me.phone_number ?? ''],
       industry: [me.industry?.id ?? ''],
+      city: [me.city ?? ''],
+      about: [me.about ?? ''],
       work_experiences: this._getFormArray(me, 'work_experiences'),
       accomplishments: this._getFormArray(me, 'accomplishments'),
       educations: this._getFormArray(me, 'educations'),

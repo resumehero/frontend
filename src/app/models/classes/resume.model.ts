@@ -47,4 +47,6 @@ export class ResumeCreate {
   resume_template_id: number;
   @Expose()
   vacancy_text: string;
+  @Expose()
+  job_title: string;
 }

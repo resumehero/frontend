@@ -30,7 +30,7 @@ export class CreateResumeComponent extends AbstractFormComponent<ResumeCreate> i
   private _resumeTemplateApi: ResumeTemplateApiService = inject(ResumeTemplateApiService);
   private _modalService: ModalService = inject(ModalService);
   readonly MIN_VACANCY_LENGTH: number = 32;
-  readonly MAX_VACANCY_LENGTH: number = 1024;
+  readonly MAX_VACANCY_LENGTH: number = 2048;
 
   get typeControl(): FormControl {
     return this.form?.resume_type as FormControl;

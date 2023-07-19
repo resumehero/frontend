@@ -20,12 +20,18 @@
           <base-form-input [control]="form.last_name" class="profile__form-field" placeholder="Last name"></base-form-input>
           <base-form-input [control]="form.email" class="profile__form-field" placeholder="Email address"></base-form-input>
           <base-form-input [control]="form.phone_number" class="profile__form-field" placeholder="Phone number"></base-form-input>
+          <base-form-input [control]="form.city" class="profile__form-field" placeholder="City"></base-form-input>
           <base-select
             [control]="form.industry"
             [options]="industryOptions"
             class="profile__form-field"
             placeholder="Industry"
           ></base-select>
+          <base-textarea
+            [control]="form.about"
+            class="profile__form-field profile__form-field_full-width"
+            placeholder="About me"
+          ></base-textarea>
         </div>
 
         <div class="profile__section-actions"></div>
