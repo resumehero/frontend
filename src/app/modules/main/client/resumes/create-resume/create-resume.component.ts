@@ -25,12 +25,13 @@ export class CreateResumeComponent extends AbstractFormComponent<ResumeCreate> i
   ResumeType: typeof ResumeType = ResumeType;
   ResumeFileType: typeof ResumeFileType = ResumeFileType;
   templatesOptions: IOption[] = [];
+  readonly MIN_VACANCY_LENGTH: number = 32;
+  readonly MAX_VACANCY_LENGTH: number = 1024;
+  readonly JOB_TITLE_MAX_LENGTH: number = 64;
   private _resumeService: ResumeService = inject(ResumeService);
   private _resumeApi: ResumeApiService = inject(ResumeApiService);
   private _resumeTemplateApi: ResumeTemplateApiService = inject(ResumeTemplateApiService);
   private _modalService: ModalService = inject(ModalService);
-  readonly MIN_VACANCY_LENGTH: number = 32;
-  readonly MAX_VACANCY_LENGTH: number = 2048;
 
   get typeControl(): FormControl {
     return this.form?.resume_type as FormControl;
@@ -51,6 +52,7 @@ export class CreateResumeComponent extends AbstractFormComponent<ResumeCreate> i
         },
         [Validators.required, Validators.minLength(this.MIN_VACANCY_LENGTH), Validators.maxLength(this.MAX_VACANCY_LENGTH)]
       ],
+      job_title: ['', [Validators.required, Validators.maxLength(this.JOB_TITLE_MAX_LENGTH)]],
       resume_template_id: ['', Validators.required]
     });
     this._handleResumeTypeChange();
